@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <category-def name="org.toxsoft.skf.dq.releng.category" label="org.toxsoft.skf.dq.releng Category">
+      <description>
+         org.toxsoft.skf.dq.releng Category
+      </description>
+   </category-def>
+   <bundle id="org.toxsoft.skf.dq.lib"/>
+   <bundle id="org.toxsoft.skf.dq.s5"/>
+
+   <!-- sources -->
+   <bundle id="org.toxsoft.skf.dq.lib.source"/>
+   <bundle id="org.toxsoft.skf.dq.s5.source"/>
+
+</site>
