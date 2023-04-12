@@ -52,7 +52,7 @@ public class SkDataQualityService
 
     @Override
     protected boolean doIsPendingEvents() {
-      return (onTicketChangedFlag || onResourcesStateChangedList != null && onResourcesStateChangedList.size() > 0);
+      return false;
     }
 
     @Override
