@@ -218,7 +218,8 @@ public class S5BackendDataQualitySingleton
       if( retValue == null ) {
         // В данный момент с ресурсом не установлена связь
         IOptionSetEdit marks = new OptionSet();
-        // Установка маркера "нет связи" не требуется, так значение по умолчанию = true
+        // Установка маркера "нет связи"
+        marks.setValue( notConnectedTicket.id(), AV_TRUE );
         return marks;
       }
       return retValue.right();

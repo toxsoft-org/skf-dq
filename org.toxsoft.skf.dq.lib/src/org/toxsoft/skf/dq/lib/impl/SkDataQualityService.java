@@ -1,8 +1,12 @@
 package org.toxsoft.skf.dq.lib.impl;
 
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+
 import org.toxsoft.core.tslib.av.IAtomicValue;
 import org.toxsoft.core.tslib.av.metainfo.IDataType;
 import org.toxsoft.core.tslib.av.opset.IOptionSet;
+import org.toxsoft.core.tslib.av.opset.IOptionSetEdit;
+import org.toxsoft.core.tslib.av.opset.impl.OptionSet;
 import org.toxsoft.core.tslib.bricks.ctx.ITsContextRo;
 import org.toxsoft.core.tslib.bricks.events.AbstractTsEventer;
 import org.toxsoft.core.tslib.bricks.events.ITsEventer;
@@ -181,8 +185,11 @@ public class SkDataQualityService
   public IOptionSet getResourceMarks( Gwid aResource ) {
     TsNullArgumentRtException.checkNull( aResource );
     if( !coreApi().backend().isActive() ) {
-      // Бекенд недоступен. По умолчанию TICKET_ID_NO_CONNECTION = true;
-      return IOptionSet.NULL;
+      // Бекенд недоступен.
+      IOptionSetEdit options = new OptionSet();
+      // По умолчанию TICKET_ID_NO_CONNECTION = true
+      options.setValue( TICKET_ID_NO_CONNECTION, AV_TRUE );
+      return options;
     }
     return backend().getResourceMarks( aResource );
   }
@@ -192,10 +199,12 @@ public class SkDataQualityService
     TsNullArgumentRtException.checkNull( aResources );
     if( !coreApi().backend().isActive() ) {
       // Бекенд недоступен.
+      IOptionSetEdit options = new OptionSet();
+      // По умолчанию TICKET_ID_NO_CONNECTION = true
+      options.setValue( TICKET_ID_NO_CONNECTION, AV_TRUE );
       IMapEdit<Gwid, IOptionSet> retValue = new ElemMap<>();
       for( Gwid gwid : aResources ) {
-        // По умолчанию TICKET_ID_NO_CONNECTION = true
-        retValue.put( gwid, IOptionSet.NULL );
+        retValue.put( gwid, options );
       }
       return retValue;
     }
