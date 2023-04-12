@@ -57,6 +57,10 @@ public class SkDataQualityService
 
     @Override
     protected void doFirePendingEvents() {
+      reallyFire();
+    }
+
+    private void reallyFire() {
       if( onTicketChangedFlag ) {
         for( ISkDataQualityChangeListener l : listeners() ) {
           try {
@@ -91,6 +95,9 @@ public class SkDataQualityService
 
     void fireTickesChangedEvent() {
       onTicketChangedFlag = true;
+      if( !isPendingEvents() ) {
+        reallyFire();
+      }
     }
 
     void fireResourcesStateChangedEvent( String aResourceId ) {
@@ -98,6 +105,9 @@ public class SkDataQualityService
         onResourcesStateChangedList = new StringArrayList();
       }
       onResourcesStateChangedList.add( aResourceId );
+      if( !isPendingEvents() ) {
+        reallyFire();
+      }
     }
   }
 
