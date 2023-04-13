@@ -170,7 +170,7 @@ public interface IBaDataQuality {
    * <li>CtPot[*]$rtdata( * ).</li>
    * </ul>
    *
-   * @param aResources {@link IGwidList} список ресурсов
+   * @param aResources {@link IGwidList} список ресурсов.
    * @throws TsNullArgumentRtException любой аргумент = null
    * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
    * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
