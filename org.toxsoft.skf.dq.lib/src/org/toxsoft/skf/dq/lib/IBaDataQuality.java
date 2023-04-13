@@ -82,8 +82,8 @@ public interface IBaDataQuality {
    * <p>
    * TODO следует разработать набор фильтров: 1) наличие тикета, 2) критерий над значением пометки
    *
-   * @param aFilterParams {@link ITsCombiFilterParams} фильтр запроса
-   * @return IMap&lt;{@link Gwid},{@link IOptionSet}&gt; состояние ресурсов, удовлетворяющих запросу
+   * @param aFilterParams {@link ITsCombiFilterParams} фильтр запроса.
+   * @return IMap&lt;{@link Gwid},{@link IOptionSet}&gt; состояние ресурсов, удовлетворяющих запросу.
    */
   IMap<Gwid, IOptionSet> queryMarkedUgwies( ITsCombiFilterParams aFilterParams );
 
