@@ -42,8 +42,8 @@ public interface IBaDataQuality {
    * <li>CtPot[potObj1]$rtdata( alive ).</li>
    * </ul>
    *
-   * @param aResource {@link Gwid} запрашиваемый ресурс
-   * @return {@link IOptionSet} значения пометок
+   * @param aResource {@link Gwid} запрашиваемый ресурс.
+   * @return {@link IOptionSet} значения пометок.
    * @throws TsNullArgumentRtException любой аргумент = null
    * @throws TsIllegalArgumentRtException запрет абстрактного {@link Gwid} - должен быть указан объект
    * @throws TsIllegalArgumentRtException запрет группового идентификатора (Gwid.isMulti() == true)
