@@ -185,7 +185,7 @@ public interface IBaDataQuality {
    * {@link ISkDataQualityService#TICKET_ID_NO_CONNECTION} со значением <code>true</code> для ресурсов сессии которые
    * были зарегистрированны ранее и значением <code>false</code> для вновь зарегистированных ресурсов.
    *
-   * @param aResources {@link IGwidList} список ресурсов
+   * @param aResources {@link IGwidList} список ресурсов.
    * @return {@link IGwidList} список ресурсов которые ранее предоставлялись сессией
    * @throws TsNullArgumentRtException любой аргумент = null
    * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
