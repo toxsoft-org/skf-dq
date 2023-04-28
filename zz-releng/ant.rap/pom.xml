@@ -19,6 +19,22 @@
           <execution>
             <id>task0</id>
             <!-- a lifecycle phase: https://maven.apache.org/ref/3.6.3/maven-core/lifecycles.html -->
+            <phase>compile</phase>
+            <configuration>
+              <target>
+
+                <echo message="call ant task: ../ant-builder/ts-build-rap.xml (make toxsoft jar-libs)" level="info" /> 
+                <ant dir="../ant-builder" antfile="ts-build-rap.xml" target="build-lib-jar" inheritAll="false" inheritRefs="false" useNativeBasedir="true" /> 
+
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>task1</id>
+            <!-- a lifecycle phase: https://maven.apache.org/ref/3.6.3/maven-core/lifecycles.html -->
             <phase>install</phase>
             <configuration>
               <target>

@@ -9,13 +9,20 @@
   <!-- загрузка общих параметров -->
   <loadproperties srcFile="${ts-scripts-dir}/ts-build-commons.properties" />
 
-  <!-- директория собранных плагинов -->
+  <!-- перед вызовом общих скриптов сборки следует задать директории назначения библиотек и плагинов -->
+  <property name="ts-dest-dir-libs" location="../${ts.target-skf-dq-lib}" />
   <property name="ts-dest-dir-plugins" location="../${ts.target-skf-dq-rcp}" />
+
+  <!-- ЦЕЛЬ: lib.jar библиотек -->
+  <target name="build-lib-jar" depends="clean" description="Сборка общих плагинов">
+    <!-- TODO: -->
+  </target>
 
   <!-- ЦЕЛЬ: сборка -->
   <target name="build" depends="clean" description="Сборка общих плагинов">
     <!-- сборка plugin-ов -->
     <!-- TODO: -->
+    <!--
     <pde.exportPlugins destination="${ts-dest-dir-plugins}"
                        exportSource="true"
                        exportSourceBundle="false"
@@ -23,6 +30,7 @@
                        plugins="org.toxsoft.skf.dq.???"
                        useworkspacecompiledclasses="true"
                        useJARFormat="true" />
+    -->
   </target>
 
   <!-- ЦЕЛЬ: очистка -->
