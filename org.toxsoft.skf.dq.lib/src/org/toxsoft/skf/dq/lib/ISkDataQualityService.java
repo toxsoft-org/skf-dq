@@ -1,18 +1,18 @@
 package org.toxsoft.skf.dq.lib;
 
-import org.toxsoft.core.tslib.av.IAtomicValue;
-import org.toxsoft.core.tslib.av.errors.AvTypeCastRtException;
-import org.toxsoft.core.tslib.av.impl.AvUtils;
-import org.toxsoft.core.tslib.av.metainfo.IDataType;
-import org.toxsoft.core.tslib.av.opset.IOptionSet;
-import org.toxsoft.core.tslib.bricks.events.ITsEventer;
-import org.toxsoft.core.tslib.bricks.filter.ITsCombiFilterParams;
-import org.toxsoft.core.tslib.bricks.strid.coll.IStridablesList;
-import org.toxsoft.core.tslib.coll.IMap;
+import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.errors.*;
+import org.toxsoft.core.tslib.av.impl.*;
+import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.bricks.events.*;
+import org.toxsoft.core.tslib.bricks.filter.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.uskat.core.ISkHardConstants;
-import org.toxsoft.uskat.core.api.ISkService;
+import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.core.api.*;
 
 /**
  * Data quality support.
@@ -28,7 +28,7 @@ public interface ISkDataQualityService
   String SERVICE_ID = ISkHardConstants.SK_SYSEXT_SERVICE_ID_PREFIX + ".DataQualities"; //$NON-NLS-1$
 
   /**
-   * Идентификатор тикета(метки): "Нет связи с ресурсом"
+   * The ID of ticket "No connection to the resource".
    * <p>
    * Значения метки автоматически устанавливается в {@link AvUtils#AV_FALSE} при вызове
    * {@link #addConnectedResources(IGwidList)} для ресурсов передаваемых в параметрах метода.
