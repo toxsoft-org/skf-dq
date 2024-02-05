@@ -13,5 +13,4 @@ Require-Bundle: org.toxsoft.extlibs.wildfly,
  org.toxsoft.skf.dq.lib
 Export-Package: org.toxsoft.skf.dq.s5,
  org.toxsoft.skf.dq.s5.addons,
- org.toxsoft.skf.dq.s5.concurrent,
  org.toxsoft.skf.dq.s5.supports
