@@ -9,7 +9,11 @@ import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.utils.errors.TsIllegalArgumentRtException;
 import org.toxsoft.core.tslib.utils.errors.TsNullArgumentRtException;
 import org.toxsoft.skf.dq.lib.ISkDataQualityService;
+import org.toxsoft.uskat.core.ISkCoreApi;
 import org.toxsoft.uskat.core.api.gwids.ISkGwidService;
+import org.toxsoft.uskat.core.impl.SkThreadExecutorService;
+
+import core.tslib.bricks.threadexecutor.ITsThreadExecutor;
 
 /**
  * Методы поддержки службы {@link ISkDataQualityService}
@@ -31,7 +35,7 @@ public class S5DataQualityServiceUtils {
    * соотвествующего типа для каждого данного/события/команды/....</li>
    * </ul>
    *
-   * @param aGwidService {@link ISkGwidService} служба обработки {@link Gwid}-идентификаторов
+   * @param aCoreApi {@link ISkCoreApi} API локального соединения с сервером
    * @param aGwids {@link IGwidList} список идентификаторов ресурсов
    * @param aCheckExist boolean <b>true</b> поднимать ошибку если {@link Gwid} указывает на несуществующие класс, объект
    *          или данное
@@ -41,19 +45,40 @@ public class S5DataQualityServiceUtils {
    * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
    * @throws TsIllegalArgumentRtException класс, объект или данное не существует в системе при aCheckExist = true
    */
-  public static IGwidList ungroupGwids( ISkGwidService aGwidService, IGwidList aGwids, boolean aCheckExist ) {
-    TsNullArgumentRtException.checkNulls( aGwidService, aGwids );
-    // Результат
-    GwidList retValue = new GwidList();
-    for( Gwid gwid : aGwids ) {
-      IGwidList expandGwids = aGwidService.expandGwid( gwid );
-      for( Gwid expandGwid : expandGwids ) {
-        if( !retValue.hasElem( gwid ) ) {
-          retValue.add( expandGwid );
-        }
-      }
-    }
-    return retValue;
+  private static class ExpandQuery implements Runnable{
+	private final ISkCoreApi coreApi;  
+	private final IGwidList gwids;
+	private GwidList retValue = new GwidList();
+	ExpandQuery( ISkCoreApi aCoreApi, IGwidList aGwids ) {
+       coreApi = TsNullArgumentRtException.checkNull( aCoreApi );
+	   gwids = TsNullArgumentRtException.checkNull( aGwids );
+	}
+	
+	@Override
+	public void run() {
+	    ISkGwidService gwidService = coreApi.gwidService();
+	    retValue = new GwidList();
+	    for( Gwid gwid : gwids ) {
+	      IGwidList expandGwids = gwidService.expandGwid( gwid );
+	      for( Gwid expandGwid : expandGwids ) {
+	        if( !retValue.hasElem( gwid ) ) {
+	          retValue.add( expandGwid );
+	        }
+	      }
+	    }
+	}
+	
+	IGwidList retValue() {
+		return retValue;
+	}
+  };
+  
+  public static IGwidList ungroupGwids( ISkCoreApi aCoreApi, IGwidList aGwids ) {
+    TsNullArgumentRtException.checkNulls( aCoreApi, aGwids );
+    ITsThreadExecutor threadExecutor = SkThreadExecutorService.getExecutor(aCoreApi);
+    ExpandQuery query = new ExpandQuery(aCoreApi, aGwids );
+    threadExecutor.syncExec(query);
+    return query.retValue();
   }
 
   /**

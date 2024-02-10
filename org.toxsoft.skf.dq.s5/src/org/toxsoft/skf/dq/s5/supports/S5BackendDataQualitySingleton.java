@@ -43,7 +43,7 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.dq.lib.ISkDataQualityTicket;
 import org.toxsoft.skf.dq.lib.impl.*;
 import org.toxsoft.skf.dq.s5.S5DataQualtiyValobjUtils;
-import org.toxsoft.uskat.core.api.gwids.ISkGwidService;
+import org.toxsoft.uskat.core.ISkCoreApi;
 import org.toxsoft.uskat.s5.server.backend.IS5BackendCoreSingleton;
 import org.toxsoft.uskat.s5.server.backend.impl.S5BackendSupportSingleton;
 import org.toxsoft.uskat.s5.server.frontend.IS5FrontendRear;
@@ -102,21 +102,10 @@ public class S5BackendDataQualitySingleton
   @EJB
   private IS5BackendCoreSingleton backendCore;
 
-  // /**
-  // * Поставщик локальных соединений с сервером
-  // */
-  // @EJB
-  // private IS5LocalConnectionSingleton localConnectionProvider;
-  //
-  // /**
-  // * Соединение с сервером. null: соединение не открывалось
-  // */
-  // private ISkConnection connection;
-
   /**
-   * Служба обработки {@link Gwid}-идентификаторов
+   * API локального соединения с сервером
    */
-  private ISkGwidService gwidService;
+  private ISkCoreApi coreApi;
 
   /**
    * Встроенный тикет: нет связи с поставщиком данных
@@ -233,8 +222,8 @@ public class S5BackendDataQualitySingleton
   public IMap<Gwid, IOptionSet> getResourcesMarks( IGwidList aResources ) {
     TsNullArgumentRtException.checkNull( aResources );
     IMapEdit<Gwid, IOptionSet> retValue = new ElemMap<>();
-    // Разгруппировка идентификатора. true: проверка существования
-    IGwidList gwids = ungroupGwids( gwidService(), aResources, true );
+    // Разгруппировка идентификатора
+    IGwidList gwids = ungroupGwids( coreApi(), aResources );
     for( Gwid gwid : gwids ) {
       IOptionSet marks = getResourceMarks( gwid );
       retValue.put( gwid, marks );
@@ -357,8 +346,8 @@ public class S5BackendDataQualitySingleton
         // Недопустимое значение метки для тикета
         throw new TsIllegalArgumentRtException( ERR_WRONG_TICKET_MARK, aValue, valueType, aTicketId, ticketType );
       }
-      // Разгруппировка ugwi. true: проверка существования классов, объектов и данных
-      IGwidList gwids = ungroupGwids( gwidService(), aResources, true );
+      // Разгруппировка ugwi
+      IGwidList gwids = ungroupGwids( coreApi(), aResources );
       // Сессия
       SessionID sessionID = null;
       // Журналирование
@@ -596,8 +585,8 @@ public class S5BackendDataQualitySingleton
       // Нет ресурсов для регистрации
       return false;
     }
-    // Разгруппировка Gwid. true: проверка существования классов, объектов и данных
-    IGwidList gwids = ungroupGwids( gwidService(), aResources, true );
+    // Разгруппировка Gwid 
+    IGwidList gwids = ungroupGwids( coreApi(), aResources );
     // Текущий список ресурсов сессии
     GwidList connectedResources = getConnectedResources( aSessionID );
     // Список фактически добавляемых данных
@@ -651,8 +640,8 @@ public class S5BackendDataQualitySingleton
       logger().debug( MSG_NO_RESOURCE_SESSION, aSessionID );
       return false;
     }
-    // Разгруппировка ugwi. false: БЕЗ проверки существования классов, объектов и данных
-    IGwidList gwids = ungroupGwids( gwidService(), aResources, false );
+    // Разгруппировка ugwi
+    IGwidList gwids = ungroupGwids( coreApi(), aResources);
 
     // Список фактически удаляемых данных
     GwidList removedGwids = new GwidList();
@@ -697,15 +686,15 @@ public class S5BackendDataQualitySingleton
   }
 
   /**
-   * Возвращает службу обработки {@link Gwid}-идентификаторов
+   * Возвращает API локального соединения с сервером
    *
-   * @return {@link ISkGwidService} служба {@link Gwid}-идентификаторов
+   * @return {@link ISkCoreApi} API локального соединения с сервером
    */
-  private ISkGwidService gwidService() {
-    if( gwidService == null ) {
-      gwidService = backendCore.getConnection().coreApi().gwidService();
+  private ISkCoreApi coreApi() {
+    if( coreApi == null ) {
+      coreApi = backendCore.getConnection().coreApi();
     }
-    return TsInternalErrorRtException.checkNull( gwidService );
+    return TsInternalErrorRtException.checkNull( coreApi );
   }
 
   /**
