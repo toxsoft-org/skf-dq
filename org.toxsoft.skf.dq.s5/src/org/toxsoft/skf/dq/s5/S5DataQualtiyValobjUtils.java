@@ -5,7 +5,7 @@ import org.toxsoft.skf.dq.lib.impl.SkDataQualityTicket;
 import org.toxsoft.skf.dq.s5.supports.S5DataQualityTicketList;
 
 /**
- * Регистрация хранителей данных подсистемы
+ * Регистрация хранителей данных подсистемы.
  *
  * @author mvk
  */
