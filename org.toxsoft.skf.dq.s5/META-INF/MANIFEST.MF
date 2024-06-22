@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.toxsoft.skf.dq.s5
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: toxsoft.org
 Automatic-Module-Name: org.toxsoft.skf.dq.s5
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.toxsoft.extlibs.wildfly,
  org.toxsoft.core.tslib,
  org.toxsoft.uskat.core,
