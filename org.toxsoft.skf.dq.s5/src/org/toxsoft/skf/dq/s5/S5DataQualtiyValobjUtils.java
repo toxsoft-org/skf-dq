@@ -17,7 +17,6 @@ public class S5DataQualtiyValobjUtils {
    * Регистрация известных хранителей
    */
   public static void registerS5Keepers() {
-    k
     TsValobjUtils.registerKeeperIfNone( SkDataQualityTicket.KEEPER_ID, SkDataQualityTicket.KEEPER );
     TsValobjUtils.registerKeeperIfNone( S5DataQualityTicketList.KEEPER_ID, S5DataQualityTicketList.KEEPER );
   }
