@@ -1,11 +1,13 @@
 package org.toxsoft.skf.dq.s5;
 
-import org.toxsoft.core.tslib.utils.valobj.TsValobjUtils;
-import org.toxsoft.skf.dq.lib.impl.SkDataQualityTicket;
-import org.toxsoft.skf.dq.s5.supports.S5DataQualityTicketList;
+import org.toxsoft.core.tslib.utils.valobj.*;
+import org.toxsoft.skf.dq.lib.impl.*;
+import org.toxsoft.skf.dq.s5.supports.*;
 
 /**
  * Регистрация хранителей данных подсистемы.
+ * <p>
+ * 9:37
  *
  * @author mvk
  */
