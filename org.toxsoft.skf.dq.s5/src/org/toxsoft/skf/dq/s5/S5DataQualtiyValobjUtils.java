@@ -7,7 +7,7 @@ import org.toxsoft.skf.dq.s5.supports.*;
 /**
  * Регистрация хранителей данных подсистемы.
  * <p>
- * 9:37
+ * 9:50
  *
  * @author mvk
  */
