@@ -7,7 +7,7 @@ import org.toxsoft.skf.dq.s5.supports.*;
 /**
  * Регистрация хранителей данных подсистемы.
  * <p>
- * 9:54
+ * 9:58
  *
  * @author mvk
  */
@@ -17,6 +17,7 @@ public class S5DataQualtiyValobjUtils {
    * Регистрация известных хранителей
    */
   public static void registerS5Keepers() {
+    k
     TsValobjUtils.registerKeeperIfNone( SkDataQualityTicket.KEEPER_ID, SkDataQualityTicket.KEEPER );
     TsValobjUtils.registerKeeperIfNone( S5DataQualityTicketList.KEEPER_ID, S5DataQualityTicketList.KEEPER );
   }
