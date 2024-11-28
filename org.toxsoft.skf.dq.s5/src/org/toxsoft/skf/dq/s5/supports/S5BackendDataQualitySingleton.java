@@ -3,53 +3,49 @@ package org.toxsoft.skf.dq.s5.supports;
 import static org.toxsoft.core.tslib.av.EAtomicType.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.skf.dq.lib.ISkDataQualityService.*;
+import static org.toxsoft.skf.dq.s5.supports.S5DataQualitySupportConfig.*;
 import static org.toxsoft.skf.dq.s5.supports.IS5Resources.*;
 import static org.toxsoft.skf.dq.s5.supports.S5DataQualityServiceUtils.*;
 import static org.toxsoft.uskat.s5.server.IS5ImplementConstants.*;
 import static org.toxsoft.uskat.s5.utils.threads.impl.S5Lockable.*;
 
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.Map.*;
+import java.util.concurrent.*;
 
-import javax.annotation.Resource;
+import javax.annotation.*;
 import javax.ejb.*;
 
-import org.infinispan.Cache;
-import org.infinispan.commons.util.CloseableIterator;
-import org.jboss.ejb.client.SessionID;
-import org.toxsoft.core.tslib.av.EAtomicType;
-import org.toxsoft.core.tslib.av.IAtomicValue;
-import org.toxsoft.core.tslib.av.impl.DataType;
-import org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants;
-import org.toxsoft.core.tslib.av.metainfo.IDataType;
-import org.toxsoft.core.tslib.av.opset.IOptionSet;
-import org.toxsoft.core.tslib.av.opset.IOptionSetEdit;
-import org.toxsoft.core.tslib.av.opset.impl.OptionSet;
-import org.toxsoft.core.tslib.bricks.events.msg.GtMessage;
-import org.toxsoft.core.tslib.bricks.filter.ITsCombiFilterParams;
-import org.toxsoft.core.tslib.bricks.strid.coll.IStridablesList;
-import org.toxsoft.core.tslib.bricks.strid.coll.IStridablesListEdit;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.StridablesList;
-import org.toxsoft.core.tslib.bricks.strid.impl.StridUtils;
+import org.infinispan.*;
+import org.infinispan.commons.util.*;
+import org.jboss.ejb.client.*;
+import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.impl.*;
+import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.av.opset.impl.*;
+import org.toxsoft.core.tslib.bricks.events.msg.*;
+import org.toxsoft.core.tslib.bricks.filter.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.coll.*;
-import org.toxsoft.core.tslib.coll.impl.ElemLinkedList;
-import org.toxsoft.core.tslib.coll.impl.ElemMap;
+import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.gw.skid.Skid;
-import org.toxsoft.core.tslib.utils.Pair;
+import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.skf.dq.lib.ISkDataQualityTicket;
+import org.toxsoft.skf.dq.lib.*;
 import org.toxsoft.skf.dq.lib.impl.*;
-import org.toxsoft.skf.dq.s5.S5DataQualtiyValobjUtils;
-import org.toxsoft.uskat.core.ISkCoreApi;
-import org.toxsoft.uskat.s5.server.backend.IS5BackendCoreSingleton;
-import org.toxsoft.uskat.s5.server.backend.impl.S5BackendSupportSingleton;
-import org.toxsoft.uskat.s5.server.frontend.IS5FrontendRear;
-import org.toxsoft.uskat.s5.server.sessions.IS5SessionInterceptor;
-import org.toxsoft.uskat.s5.server.sessions.IS5SessionManager;
-import org.toxsoft.uskat.s5.utils.threads.impl.S5Lockable;
+import org.toxsoft.skf.dq.s5.*;
+import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.s5.server.backend.impl.*;
+import org.toxsoft.uskat.s5.server.backend.supports.core.*;
+import org.toxsoft.uskat.s5.server.frontend.*;
+import org.toxsoft.uskat.s5.server.sessions.*;
+import org.toxsoft.uskat.s5.utils.threads.impl.*;
 
 /**
  * Реализация {@link IS5BackendDataQualitySingleton}.
@@ -147,12 +143,17 @@ public class S5BackendDataQualitySingleton
   // Определение шаблонных методов S5BackendSupportSingleton
   //
   @Override
+  protected IStringList doConfigurationPaths() {
+    return new StringArrayList( ALL_DQ_OPDEFS.keys() );
+  }
+
+  @Override
   @TransactionAttribute( TransactionAttributeType.REQUIRED )
   public void saveConfiguration( IOptionSet aConfiguration ) {
     TsNullArgumentRtException.checkNull( aConfiguration );
     super.saveConfiguration( aConfiguration );
-    S5DataQualityTicketList prevTickets = IS5DataQualitySupportConfig.TICKETS.getValue( configuration() ).asValobj();
-    S5DataQualityTicketList newTickets = IS5DataQualitySupportConfig.TICKETS.getValue( aConfiguration ).asValobj();
+    S5DataQualityTicketList prevTickets = DQ_TICKETS.getValue( configuration() ).asValobj();
+    S5DataQualityTicketList newTickets = DQ_TICKETS.getValue( aConfiguration ).asValobj();
     if( !newTickets.equals( prevTickets ) ) {
       // Фактическое сохранение
       super.saveConfiguration( aConfiguration );
@@ -172,7 +173,7 @@ public class S5BackendDataQualitySingleton
         addBuiltInTicket( TICKET_ID_NO_CONNECTION, STR_D_NOT_CONNECTED, STR_N_NOT_CONNECTED, BOOLEAN, avBool( true ) );
     // Загрузка конфигурации
     IOptionSet config = configuration();
-    S5DataQualityTicketList tickets = IS5DataQualitySupportConfig.TICKETS.getValue( config ).asValobj();
+    S5DataQualityTicketList tickets = S5DataQualitySupportConfig.DQ_TICKETS.getValue( config ).asValobj();
     updateTickets( tickets );
 
     // Установка перехватчика событий сессий пользователей
@@ -404,9 +405,9 @@ public class S5BackendDataQualitySingleton
       ISkDataQualityTicket newTicket = new SkDataQualityTicket( aTicketId, aName, aDescription, aDataType );
       // Сохранение конфигурации
       IOptionSetEdit config = new OptionSet( configuration() );
-      S5DataQualityTicketList tickets = IS5DataQualitySupportConfig.TICKETS.getValue( config ).asValobj();
+      S5DataQualityTicketList tickets = S5DataQualitySupportConfig.DQ_TICKETS.getValue( config ).asValobj();
       tickets.add( newTicket );
-      IS5DataQualitySupportConfig.TICKETS.setValue( config, avValobj( tickets ) );
+      S5DataQualitySupportConfig.DQ_TICKETS.setValue( config, avValobj( tickets ) );
       // Сохранение настроек в базе данных
       saveConfiguration( config );
       return newTicket;
@@ -428,9 +429,9 @@ public class S5BackendDataQualitySingleton
       }
       // Сохранение конфигурации
       IOptionSetEdit config = new OptionSet( configuration() );
-      S5DataQualityTicketList tickets = IS5DataQualitySupportConfig.TICKETS.getValue( config ).asValobj();
+      S5DataQualityTicketList tickets = S5DataQualitySupportConfig.DQ_TICKETS.getValue( config ).asValobj();
       registeredTickets.removeById( aTicketId );
-      IS5DataQualitySupportConfig.TICKETS.setValue( config, avValobj( tickets ) );
+      S5DataQualitySupportConfig.DQ_TICKETS.setValue( config, avValobj( tickets ) );
       // Сохранение настроек в базе данных
       saveConfiguration( config );
     }
@@ -585,7 +586,7 @@ public class S5BackendDataQualitySingleton
       // Нет ресурсов для регистрации
       return false;
     }
-    // Разгруппировка Gwid 
+    // Разгруппировка Gwid
     IGwidList gwids = ungroupGwids( coreApi(), aResources );
     // Текущий список ресурсов сессии
     GwidList connectedResources = getConnectedResources( aSessionID );
@@ -641,7 +642,7 @@ public class S5BackendDataQualitySingleton
       return false;
     }
     // Разгруппировка ugwi
-    IGwidList gwids = ungroupGwids( coreApi(), aResources);
+    IGwidList gwids = ungroupGwids( coreApi(), aResources );
 
     // Список фактически удаляемых данных
     GwidList removedGwids = new GwidList();
@@ -692,7 +693,7 @@ public class S5BackendDataQualitySingleton
    */
   private ISkCoreApi coreApi() {
     if( coreApi == null ) {
-      coreApi = backendCore.getConnection().coreApi();
+      coreApi = backendCore.getSharedConnection().coreApi();
     }
     return TsInternalErrorRtException.checkNull( coreApi );
   }
