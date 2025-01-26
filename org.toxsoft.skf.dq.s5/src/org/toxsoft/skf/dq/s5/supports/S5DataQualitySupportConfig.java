@@ -1,6 +1,7 @@
 package org.toxsoft.skf.dq.s5.supports;
 
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+import static org.toxsoft.core.tslib.av.impl.DataDef.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.dq.s5.supports.IS5Resources.*;
 
@@ -9,7 +10,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.skf.dq.lib.*;
-import org.toxsoft.uskat.s5.utils.*;
 
 /**
  * Конфигурация поддержки расширения бекенда для службы качества данных {@link ISkDataQualityService}
@@ -17,8 +17,7 @@ import org.toxsoft.uskat.s5.utils.*;
  * @author mvk
  */
 @SuppressWarnings( "nls" )
-public class S5DataQualitySupportConfig
-    extends S5RegisteredConstants {
+public class S5DataQualitySupportConfig {
 
   /**
    * Префикс идентфикаторов подсистемы
@@ -30,7 +29,7 @@ public class S5DataQualitySupportConfig
    * <p>
    * Тип: {@link EAtomicType#VALOBJ} содержит {@link S5DataQualityTicketList}
    */
-  public static final IDataDef DQ_TICKETS = register( SYBSYSTEM_ID_PREFIX + ".tickets", EAtomicType.VALOBJ, //
+  public static final IDataDef DQ_TICKETS = create( SYBSYSTEM_ID_PREFIX + ".tickets", EAtomicType.VALOBJ, //
       TSID_NAME, STR_N_TICKETS, //
       TSID_DESCRIPTION, STR_D_TICKETS, //
       TSID_IS_NULL_ALLOWED, AV_FALSE, //
