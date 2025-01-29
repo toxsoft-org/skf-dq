@@ -43,7 +43,7 @@ public final class S5BaDataQualityLocal
    */
   public S5BaDataQualityLocal( IS5BackendLocal aOwner ) {
     super( aOwner, ISkDataQualityServiceHardConstants.BAINF_DATA_QUALITY );
-    dataQualitySupport = aOwner.backendSingleton().get( S5BackendDataQualitySingleton.BACKEND_DATA_QUALITY_ID,
+    dataQualitySupport = aOwner.backendSingleton().findSupport( S5BackendDataQualitySingleton.BACKEND_DATA_QUALITY_ID,
         IS5BackendDataQualitySingleton.class );
     // Установка конфигурации фронтенда
     frontend().frontendData().setBackendAddonData( IBaDataQuality.ADDON_ID, baData );
