@@ -13,7 +13,7 @@ import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.Skid;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.dq.lib.*;
-import org.toxsoft.uskat.s5.common.sessions.ISkSession;
+import org.toxsoft.uskat.classes.*;
 import org.toxsoft.uskat.s5.server.backend.IS5BackendSupportSingleton;
 
 /**
