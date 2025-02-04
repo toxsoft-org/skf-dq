@@ -18,6 +18,11 @@
   <target name="build-lib-jar" depends="clean" description="Сборка общих плагинов">
     <ant dir="../../org.toxsoft.skf.dq.lib" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
     <ant dir="../../org.toxsoft.skf.dq.s5" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
+    <ant dir="../../org.toxsoft.skf.dq.virtdata" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
+
+    <ant dir="../../org.toxsoft.skf.dq.virtdata.netnode.skatlet" antfile="ts-build-skatlet.xml" target="1_clean" />
+    <ant dir="../../org.toxsoft.skf.dq.virtdata.netnode.skatlet" antfile="ts-build-skatlet.xml" target="2_build" />
+    <ant dir="../../org.toxsoft.skf.dq.virtdata.netnode.skatlet" antfile="ts-build-skatlet.xml" target="3_build_deploy" />
   </target>
 
   <!-- ЦЕЛЬ: сборка plugin-ов -->
@@ -29,7 +34,8 @@
                        exportSourceBundle="false"
                        exportType="directory"
                        plugins="org.toxsoft.skf.dq.lib,
-                                org.toxsoft.skf.dq.s5"
+                                org.toxsoft.skf.dq.s5,
+                                org.toxsoft.skf.dq.virtdata"
                        useworkspacecompiledclasses="true"
                        useJARFormat="true" />
   </target>

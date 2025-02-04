@@ -7,9 +7,11 @@
    </category-def>
    <bundle id="org.toxsoft.skf.dq.lib"/>
    <bundle id="org.toxsoft.skf.dq.s5"/>
+   <bundle id="org.toxsoft.skf.dq.virtdata"/>
 
    <!-- sources -->
    <bundle id="org.toxsoft.skf.dq.lib.source"/>
    <bundle id="org.toxsoft.skf.dq.s5.source"/>
+   <bundle id="org.toxsoft.skf.dq.virtdata.source"/>
 
 </site>

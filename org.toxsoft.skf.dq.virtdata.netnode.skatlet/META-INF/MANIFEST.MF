@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Writing sk.NetNode virtual data based on the data quality service
+Bundle-SymbolicName: org.toxsoft.skf.dq.virtdata.netnode.skatlet
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: ToxSoft Ltd.
+Automatic-Module-Name: org.toxsoft.skf.dq.virtdata.netnode.skatlet
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Require-Bundle: org.toxsoft.extlibs.log4j,
+ org.toxsoft.core.tslib,
+ org.toxsoft.core.log4j,
+ org.toxsoft.uskat.core,
+ org.toxsoft.uskat.virtdata,
+ org.toxsoft.uskat.s5,
+ org.toxsoft.skf.dq.lib,
+ org.toxsoft.skf.dq.virtdata
+Export-Package: org.toxsoft.skf.dq.virtdata.netnode.skatlet
+TsPluginContainerVersion: 2
+TsPluginVersion: {2,1,2024-05-01_00:00:00}
+TsPluginType: Skatlet
+TsPluginClassName: org.toxsoft.skf.dq.virtdata.netnode.skatlet.SkNetNodeSkatlet

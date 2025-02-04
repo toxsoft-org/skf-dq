@@ -566,6 +566,8 @@
   <modules>
     <module>org.toxsoft.skf.dq.lib</module>
     <module>org.toxsoft.skf.dq.s5</module>
+    <module>org.toxsoft.skf.dq.virtdata</module>
+    <module>org.toxsoft.skf.dq.virtdata.netnode.skatlet</module>
 
     <module>zz-releng/p2.main</module>
     <module>zz-releng/ant.main</module>
