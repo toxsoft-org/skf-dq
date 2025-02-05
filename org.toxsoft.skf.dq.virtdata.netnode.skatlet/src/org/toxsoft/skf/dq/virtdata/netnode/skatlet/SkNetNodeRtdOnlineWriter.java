@@ -13,7 +13,7 @@ import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.virtdata.*;
 
 /**
- * Писатель виртуального данного: {@link ISkNetNode#RTDID_ONLINE}
+ * Писатель виртуального данного: {@link ISkNetNode#RTDID_ONLINE}.
  *
  * @author mvk
  */
