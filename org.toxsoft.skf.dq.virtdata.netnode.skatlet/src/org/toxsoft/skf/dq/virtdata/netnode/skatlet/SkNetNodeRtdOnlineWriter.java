@@ -40,7 +40,7 @@ final class SkNetNodeRtdOnlineWriter
   @Override
   protected IAtomicValue doCalculateValue() {
     IAtomicValue health = currdata.get( RTDID_HEALTH );
-    return avBool( (health.isAssigned() && health.asInt() > 0) );
+    return avValobj( (health.isAssigned() && health.asInt() > 0) ? EConnState.ONLINE : EConnState.OFFLINE );
   }
 
   @Override
