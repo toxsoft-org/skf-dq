@@ -13,13 +13,14 @@ import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.dq.lib.*;
 import org.toxsoft.uskat.classes.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.impl.*;
 import org.toxsoft.uskat.virtdata.*;
 
 /**
- * Virtual Data Skatlet Writer for GBH.
+ * Virtual Data Skatlet Writer for {@link ISkNetNode}.
  *
  * @author mvk
  */
@@ -70,6 +71,15 @@ public class SkNetNodeSkatlet
         writers.add( new SkNetNodeRtdHealthWriter( coreApi, netNodeId, netNodeResources ) );
         writers.add( new SkNetNodeRtdOnlineWriter( coreApi, netNodeId ) );
       }
+      // Register dataquality list
+      GwidList writeDataIds = new GwidList();
+      for( SkAbstractVirtDataCurrDataWriter writer : writers ) {
+        writeDataIds.add( writer.writeDataId() );
+      }
+      if( writeDataIds.size() > 0 ) {
+        ISkDataQualityService dataQualityService = coreApi.getService( ISkDataQualityService.SERVICE_ID );
+        dataQualityService.addConnectedResources( writeDataIds );
+      }
     } );
     logger().info( "%s: start(). writers count = %d", id(), Integer.valueOf( writers.size() ) ); //$NON-NLS-1$
   }
@@ -77,11 +87,18 @@ public class SkNetNodeSkatlet
   @Override
   public boolean queryStop() {
     super.queryStop();
-
-    ITsThreadExecutor threadExecutor = SkThreadExecutorService.getExecutor( getSharedConnection().coreApi() );
+    ISkCoreApi coreApi = getSharedConnection().coreApi();
+    ITsThreadExecutor threadExecutor = SkThreadExecutorService.getExecutor( coreApi );
     threadExecutor.syncExec( () -> {
+      // Deregister dataquality list
+      GwidList writeDataIds = new GwidList();
       for( SkAbstractVirtDataCurrDataWriter writer : writers ) {
+        writeDataIds.add( writer.writeDataId() );
         writer.close();
+      }
+      if( writeDataIds.size() > 0 ) {
+        ISkDataQualityService dataQualityService = coreApi.getService( ISkDataQualityService.SERVICE_ID );
+        dataQualityService.removeConnectedResources( writeDataIds );
       }
     } );
     logger().info( "%s: queryStop(). virtual data writers (%d) are closed", id(), Integer.valueOf( writers.size() ) ); //$NON-NLS-1$
