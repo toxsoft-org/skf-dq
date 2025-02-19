@@ -1,18 +1,16 @@
 package org.toxsoft.skf.dq.s5.addons;
 
-import org.toxsoft.core.tslib.av.IAtomicValue;
-import org.toxsoft.core.tslib.av.metainfo.IDataType;
-import org.toxsoft.core.tslib.av.opset.IOptionSet;
-import org.toxsoft.core.tslib.bricks.events.msg.GtMessage;
-import org.toxsoft.core.tslib.bricks.filter.ITsCombiFilterParams;
-import org.toxsoft.core.tslib.bricks.strid.coll.IStridablesList;
-import org.toxsoft.core.tslib.coll.IMap;
-import org.toxsoft.core.tslib.gw.gwid.Gwid;
-import org.toxsoft.core.tslib.gw.gwid.IGwidList;
-import org.toxsoft.core.tslib.utils.errors.TsNullArgumentRtException;
+import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.bricks.events.msg.*;
+import org.toxsoft.core.tslib.bricks.filter.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.dq.lib.*;
-import org.toxsoft.uskat.s5.server.backend.addons.IS5BackendRemote;
-import org.toxsoft.uskat.s5.server.backend.addons.S5AbstractBackendAddonRemote;
+import org.toxsoft.uskat.s5.server.backend.addons.*;
 
 /**
  * Remote {@link IBaDataQuality} implementation.
@@ -77,6 +75,11 @@ public final class S5BaDataQualityRemote
   @Override
   public IGwidList getConnectedResources() {
     return session().getConnectedResources();
+  }
+
+  @Override
+  public IGwidList getConnectedResources( boolean aOwnIncluded, boolean aNotOwnIncluded ) {
+    return session().getConnectedResources( aOwnIncluded, aNotOwnIncluded );
   }
 
   @Override

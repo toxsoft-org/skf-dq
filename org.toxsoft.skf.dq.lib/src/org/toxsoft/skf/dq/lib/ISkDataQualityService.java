@@ -120,8 +120,31 @@ public interface ISkDataQualityService
    * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
    * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
    * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
+   * @deprecated использовать {@link #getConnectedResources(boolean, boolean)}
    */
+  @Deprecated
   IGwidList getConnectedResources();
+
+  /**
+   * Возвращает список ресурсов за поставку которых отвечает указанная сессия.
+   * <p>
+   * {@link Gwid} ресурсов представляют данные объектов. Примеры возможных {@link Gwid}:
+   * <ul>
+   * <li>CtPot[potObj1]$rtdata( alive ).</li>
+   * <li>CtPot[potObj1]$rtdata( * ).</li>
+   * <li>CtPot[*]$rtdata( alive ).</li>
+   * <li>CtPot[*]$rtdata( * ).</li>
+   * </ul>
+   *
+   * @param aOwnIncluded <b>true</b> включать в результат ресурсы предоставляемые собственной сессией;
+   * @param aNotOwnIncluded <b>true</b> включать в результат ресурсы предоставляемые другими сессиями;
+   * @return {@link IGwidList} список ресурсов предоставляемых ресурсов.
+   * @throws TsNullArgumentRtException любой аргумент = null
+   * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
+   * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
+   * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
+   */
+  IGwidList getConnectedResources( boolean aOwnIncluded, boolean aNotOwnIncluded );
 
   /**
    * Извещает службу о том, что за поставку ресурсов отвечает клиент службы.

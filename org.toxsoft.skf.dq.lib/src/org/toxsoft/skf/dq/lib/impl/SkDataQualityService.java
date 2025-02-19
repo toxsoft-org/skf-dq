@@ -2,30 +2,26 @@ package org.toxsoft.skf.dq.lib.impl;
 
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 
-import org.toxsoft.core.tslib.av.IAtomicValue;
-import org.toxsoft.core.tslib.av.metainfo.IDataType;
-import org.toxsoft.core.tslib.av.opset.IOptionSet;
-import org.toxsoft.core.tslib.av.opset.IOptionSetEdit;
-import org.toxsoft.core.tslib.av.opset.impl.OptionSet;
-import org.toxsoft.core.tslib.bricks.ctx.ITsContextRo;
-import org.toxsoft.core.tslib.bricks.events.AbstractTsEventer;
-import org.toxsoft.core.tslib.bricks.events.ITsEventer;
-import org.toxsoft.core.tslib.bricks.events.msg.GenericMessage;
-import org.toxsoft.core.tslib.bricks.filter.ITsCombiFilterParams;
-import org.toxsoft.core.tslib.bricks.strid.coll.IStridablesList;
-import org.toxsoft.core.tslib.coll.IMap;
-import org.toxsoft.core.tslib.coll.IMapEdit;
-import org.toxsoft.core.tslib.coll.impl.ElemMap;
-import org.toxsoft.core.tslib.coll.primtypes.IStringListEdit;
-import org.toxsoft.core.tslib.coll.primtypes.impl.StringArrayList;
-import org.toxsoft.core.tslib.gw.gwid.Gwid;
-import org.toxsoft.core.tslib.gw.gwid.IGwidList;
-import org.toxsoft.core.tslib.utils.errors.TsNullArgumentRtException;
-import org.toxsoft.core.tslib.utils.logs.impl.LoggerUtils;
+import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.av.opset.impl.*;
+import org.toxsoft.core.tslib.bricks.ctx.*;
+import org.toxsoft.core.tslib.bricks.events.*;
+import org.toxsoft.core.tslib.bricks.events.msg.*;
+import org.toxsoft.core.tslib.bricks.filter.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.core.tslib.coll.primtypes.impl.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.dq.lib.*;
-import org.toxsoft.uskat.core.ISkServiceCreator;
-import org.toxsoft.uskat.core.devapi.IDevCoreApi;
-import org.toxsoft.uskat.core.impl.AbstractSkService;
+import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.core.devapi.*;
+import org.toxsoft.uskat.core.impl.*;
 
 /**
  * Реализация службы {@link ISkDataQualityService}.
@@ -167,19 +163,18 @@ public class SkDataQualityService
 
   @Override
   protected boolean onBackendMessage( GenericMessage aMessage ) {
-    switch( aMessage.messageId() ) {
-      case SkDataQualityMsgResourceChanged.MSG_ID: {
+    return switch( aMessage.messageId() ) {
+      case SkDataQualityMsgResourceChanged.MSG_ID -> {
         String resourceId = SkDataQualityMsgResourceChanged.INSTANCE.getResourceId( aMessage );
         eventer.fireResourcesStateChangedEvent( resourceId );
-        return true;
+        yield true;
       }
-      case SkDataQualityMsgTicketsChanged.MSG_ID: {
+      case SkDataQualityMsgTicketsChanged.MSG_ID -> {
         eventer.fireTickesChangedEvent();
-        return true;
+        yield true;
       }
-      default:
-        return false;
-    }
+      default -> false;
+    };
   }
 
   @Override
@@ -229,35 +224,35 @@ public class SkDataQualityService
 
   @Override
   public IGwidList getConnectedResources() {
-    // TODO: отработка если нет связи, локальное сохранение списка ресурсов
     return backend().getConnectedResources();
+  }
+
+  @Override
+  public IGwidList getConnectedResources( boolean aOwnIncluded, boolean aNotOwnIncluded ) {
+    return backend().getConnectedResources( aOwnIncluded, aNotOwnIncluded );
   }
 
   @Override
   public void addConnectedResources( IGwidList aResources ) {
     TsNullArgumentRtException.checkNull( aResources );
-    // TODO: отработка если нет связи, локальное сохранение списка ресурсов
     backend().addConnectedResources( aResources );
   }
 
   @Override
   public void removeConnectedResources( IGwidList aResources ) {
     TsNullArgumentRtException.checkNull( aResources );
-    // TODO: отработка если нет связи, локальное сохранение списка ресурсов
     backend().removeConnectedResources( aResources );
   }
 
   @Override
   public IGwidList setConnectedResources( IGwidList aResources ) {
     TsNullArgumentRtException.checkNull( aResources );
-    // TODO: отработка если нет связи, локальное сохранение списка ресурсов
     return backend().setConnectedResources( aResources );
   }
 
   @Override
   public void setMarkValue( String aTicketId, IAtomicValue aValue, IGwidList aResources ) {
     TsNullArgumentRtException.checkNulls( aTicketId, aValue, aResources );
-    // TODO: отработка если нет связи, локальное сохранение списка ресурсов со значением метки
     backend().setMarkValue( aTicketId, aValue, aResources );
   }
 

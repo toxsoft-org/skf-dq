@@ -3,9 +3,9 @@ package org.toxsoft.skf.dq.s5.supports;
 import static org.toxsoft.core.tslib.av.EAtomicType.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.skf.dq.lib.ISkDataQualityService.*;
-import static org.toxsoft.skf.dq.s5.supports.S5DataQualitySupportConfig.*;
 import static org.toxsoft.skf.dq.s5.supports.IS5Resources.*;
 import static org.toxsoft.skf.dq.s5.supports.S5DataQualityServiceUtils.*;
+import static org.toxsoft.skf.dq.s5.supports.S5DataQualitySupportConfig.*;
 import static org.toxsoft.uskat.s5.server.IS5ImplementConstants.*;
 import static org.toxsoft.uskat.s5.utils.threads.impl.S5Lockable.*;
 
@@ -237,6 +237,29 @@ public class S5BackendDataQualitySingleton
     TsNullArgumentRtException.checkNull( aQueryParams );
     // TODO Auto-generated method stub
     throw new TsUnderDevelopmentRtException();
+  }
+
+  @Override
+  @TransactionAttribute( TransactionAttributeType.SUPPORTS )
+  public IMap<Skid, IGwidList> getConnectedResources() {
+    IMapEdit<Skid, IGwidList> retValue = new ElemMap<>();
+    try( CloseableIterator<Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>>> iterator =
+        marksByGwidsCache.entrySet().iterator() ) {
+      while( iterator.hasNext() ) {
+        Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>> entry = iterator.next();
+        Gwid gwid = entry.getKey();
+        Set<Skid> sessionIds = entry.getValue().left();
+        for( Skid sessionId : sessionIds ) {
+          GwidList gwids = (GwidList)retValue.findByKey( sessionId );
+          if( gwids == null ) {
+            gwids = new GwidList();
+            retValue.put( sessionId, gwids );
+          }
+          gwids.add( gwid );
+        }
+      }
+    }
+    return retValue;
   }
 
   @Override

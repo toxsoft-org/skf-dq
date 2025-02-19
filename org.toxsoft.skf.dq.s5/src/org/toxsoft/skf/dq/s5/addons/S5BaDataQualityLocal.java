@@ -1,20 +1,18 @@
 package org.toxsoft.skf.dq.s5.addons;
 
-import org.toxsoft.core.tslib.av.IAtomicValue;
-import org.toxsoft.core.tslib.av.metainfo.IDataType;
-import org.toxsoft.core.tslib.av.opset.IOptionSet;
-import org.toxsoft.core.tslib.bricks.events.msg.GtMessage;
-import org.toxsoft.core.tslib.bricks.filter.ITsCombiFilterParams;
-import org.toxsoft.core.tslib.bricks.strid.coll.IStridablesList;
-import org.toxsoft.core.tslib.coll.IMap;
-import org.toxsoft.core.tslib.gw.gwid.Gwid;
-import org.toxsoft.core.tslib.gw.gwid.IGwidList;
-import org.toxsoft.core.tslib.utils.errors.TsNullArgumentRtException;
+import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.bricks.events.msg.*;
+import org.toxsoft.core.tslib.bricks.filter.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.dq.lib.*;
-import org.toxsoft.skf.dq.s5.supports.IS5BackendDataQualitySingleton;
-import org.toxsoft.skf.dq.s5.supports.S5BackendDataQualitySingleton;
-import org.toxsoft.uskat.s5.server.backend.addons.IS5BackendLocal;
-import org.toxsoft.uskat.s5.server.backend.addons.S5AbstractBackendAddonLocal;
+import org.toxsoft.skf.dq.s5.supports.*;
+import org.toxsoft.uskat.s5.server.backend.addons.*;
 
 /**
  * Local {@link IBaDataQuality} implementation.
@@ -95,6 +93,20 @@ public final class S5BaDataQualityLocal
   @Override
   public IGwidList getConnectedResources() {
     return dataQualitySupport.getConnectedResources( sessionID() );
+  }
+
+  @Override
+  public IGwidList getConnectedResources( boolean aOwnIncluded, boolean aNotOwnIncluded ) {
+    Skid sessionId = sessionID();
+    IMap<Skid, IGwidList> connected = dataQualitySupport.getConnectedResources();
+    GwidList retValue = new GwidList();
+    for( Skid id : connected.keys() ) {
+      boolean isOwnSession = sessionId.equals( id );
+      if( isOwnSession && aOwnIncluded || !isOwnSession && aNotOwnIncluded ) {
+        retValue.addAll( connected.getByKey( sessionId ) );
+      }
+    }
+    return retValue;
   }
 
   @Override

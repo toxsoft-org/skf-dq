@@ -1,20 +1,20 @@
 package org.toxsoft.skf.dq.s5.supports;
 
-import javax.ejb.Local;
+import javax.ejb.*;
 
-import org.toxsoft.core.tslib.av.IAtomicValue;
-import org.toxsoft.core.tslib.av.errors.AvTypeCastRtException;
-import org.toxsoft.core.tslib.av.metainfo.IDataType;
-import org.toxsoft.core.tslib.av.opset.IOptionSet;
-import org.toxsoft.core.tslib.bricks.filter.ITsCombiFilterParams;
-import org.toxsoft.core.tslib.bricks.strid.coll.IStridablesList;
-import org.toxsoft.core.tslib.coll.IMap;
+import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.errors.*;
+import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.bricks.filter.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.gw.skid.Skid;
+import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.dq.lib.*;
 import org.toxsoft.uskat.classes.*;
-import org.toxsoft.uskat.s5.server.backend.IS5BackendSupportSingleton;
+import org.toxsoft.uskat.s5.server.backend.*;
 
 /**
  * Поддержка расширения бекенда для службы качества данных {@link IBaDataQuality}
@@ -108,8 +108,31 @@ public interface IS5BackendDataQualitySingleton
    * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
    * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
    * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
+   * @deprecated использовать {@link #getConnectedResources()}.
    */
+  @Deprecated
   IGwidList getConnectedResources( Skid aSessionID );
+
+  /**
+   * Возвращает карту ресурсов
+   * <p>
+   * {@link Gwid} ресурсов представляют данные объектов. Примеры возможных {@link Gwid}:
+   * <ul>
+   * <li>CtPot[potObj1]$rtdata( alive ).</li>
+   * <li>CtPot[potObj1]$rtdata( * ).</li>
+   * <li>CtPot[*]$rtdata( alive ).</li>
+   * <li>CtPot[*]$rtdata( * ).</li>
+   * </ul>
+   *
+   * @return {@link IMap}&lt;{@link IGwidList}&gt; карта ресурсов. <br>
+   *         Ключ: идентификатор сессии которая представляет ресурсы. <br>
+   *         Значение: список ресурсов предоставляемых сессией.
+   * @throws TsNullArgumentRtException любой аргумент = null
+   * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
+   * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
+   * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
+   */
+  IMap<Skid, IGwidList> getConnectedResources();
 
   /**
    * Извещает службу о том, что за поставку ресурсов отвечает указанная сессия.
