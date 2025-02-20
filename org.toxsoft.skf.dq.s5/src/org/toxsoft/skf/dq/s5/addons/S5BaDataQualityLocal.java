@@ -103,7 +103,7 @@ public final class S5BaDataQualityLocal
     for( Skid id : connected.keys() ) {
       boolean isOwnSession = sessionId.equals( id );
       if( isOwnSession && aOwnIncluded || !isOwnSession && aNotOwnIncluded ) {
-        retValue.addAll( connected.getByKey( sessionId ) );
+        retValue.addAll( connected.getByKey( id ) );
       }
     }
     return retValue;

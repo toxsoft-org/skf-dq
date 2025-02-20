@@ -115,7 +115,7 @@ public class S5BaDataQualitySession
     for( Skid id : connected.keys() ) {
       boolean isOwnSession = sessionId.equals( id );
       if( isOwnSession && aOwnIncluded || !isOwnSession && aNotOwnIncluded ) {
-        retValue.addAll( connected.getByKey( sessionId ) );
+        retValue.addAll( connected.getByKey( id ) );
       }
     }
     return retValue;
