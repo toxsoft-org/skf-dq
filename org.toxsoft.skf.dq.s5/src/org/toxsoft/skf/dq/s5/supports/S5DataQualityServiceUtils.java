@@ -2,17 +2,15 @@ package org.toxsoft.skf.dq.s5.supports;
 
 import static org.toxsoft.skf.dq.s5.supports.IS5Resources.*;
 
-import org.toxsoft.core.tslib.bricks.threadexec.ITsThreadExecutor;
-import org.toxsoft.core.tslib.coll.primtypes.IStringList;
-import org.toxsoft.core.tslib.coll.primtypes.IStringListEdit;
-import org.toxsoft.core.tslib.coll.primtypes.impl.StringArrayList;
+import org.toxsoft.core.tslib.bricks.threadexec.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.utils.errors.TsIllegalArgumentRtException;
-import org.toxsoft.core.tslib.utils.errors.TsNullArgumentRtException;
-import org.toxsoft.skf.dq.lib.ISkDataQualityService;
-import org.toxsoft.uskat.core.ISkCoreApi;
-import org.toxsoft.uskat.core.api.gwids.ISkGwidService;
-import org.toxsoft.uskat.core.impl.SkThreadExecutorService;
+import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.dq.lib.*;
+import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.core.api.gwids.*;
+import org.toxsoft.uskat.core.impl.*;
 
 /**
  * Методы поддержки службы {@link ISkDataQualityService}
@@ -30,22 +28,34 @@ public class S5DataQualityServiceUtils {
       implements Runnable {
 
     private final ISkCoreApi coreApi;
+    private final Gwid       gwid;
     private final IGwidList  gwids;
     private GwidList         retValue = new GwidList();
+
+    ExpandQuery( ISkCoreApi aCoreApi, Gwid aGwid ) {
+      coreApi = TsNullArgumentRtException.checkNull( aCoreApi );
+      gwids = null;
+      gwid = aGwid;
+    }
 
     ExpandQuery( ISkCoreApi aCoreApi, IGwidList aGwids ) {
       coreApi = TsNullArgumentRtException.checkNull( aCoreApi );
       gwids = TsNullArgumentRtException.checkNull( aGwids );
+      gwid = null;
     }
 
     @Override
     public void run() {
       ISkGwidService gwidService = coreApi.gwidService();
+      if( gwid != null ) {
+        retValue = gwidService.expandGwid( gwid );
+        return;
+      }
       retValue = new GwidList();
-      for( Gwid gwid : gwids ) {
-        IGwidList expandGwids = gwidService.expandGwid( gwid );
+      for( Gwid g : gwids ) {
+        IGwidList expandGwids = gwidService.expandGwid( g );
         for( Gwid expandGwid : expandGwids ) {
-          if( !retValue.hasElem( gwid ) ) {
+          if( !retValue.hasElem( g ) ) {
             retValue.add( expandGwid );
           }
         }
@@ -55,6 +65,35 @@ public class S5DataQualityServiceUtils {
     IGwidList retValue() {
       return retValue;
     }
+  }
+
+  /**
+   * Проводит разгруппировку указанного идентификатора.
+   * <p>
+   * Под разгруппировкой {@link Gwid} понимается замена групповых ({@link Gwid#isMulti()} == true), на НЕгрупповые
+   * ({@link Gwid#isMulti()} == false). Таким образом в возращаемом списке {@link Gwid} представлены {@link Gwid}
+   * КОНКРЕТНОГО данного/события/команды/... КОНКРЕТНОГО объекта.
+   * <ul>
+   * <li>Если {@link Gwid} представляет много объектов (*), то производится создание {@link Gwid} для каждого
+   * объекта.</li>
+   * <li>Если {@link Gwid} представляет много данных/событий/команд/...(*), то производится создание {@link Gwid}
+   * соотвествующего типа для каждого данного/события/команды/....</li>
+   * </ul>
+   *
+   * @param aCoreApi {@link ISkCoreApi} API локального соединения с сервером
+   * @param aGwid {@link Gwid} идентификатор ресурсов
+   * @return {@link IGwidList} список {@link Gwid} полученных после нормализации
+   * @throws TsNullArgumentRtException аргумент = null
+   * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
+   * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
+   * @throws TsIllegalArgumentRtException класс, объект или данное не существует в системе при aCheckExist = true
+   */
+  public static IGwidList ungroupGwid( ISkCoreApi aCoreApi, Gwid aGwid ) {
+    TsNullArgumentRtException.checkNulls( aCoreApi, aGwid );
+    ITsThreadExecutor threadExecutor = SkThreadExecutorService.getExecutor( aCoreApi );
+    ExpandQuery query = new ExpandQuery( aCoreApi, aGwid );
+    threadExecutor.syncExec( query );
+    return query.retValue();
   }
 
   /**

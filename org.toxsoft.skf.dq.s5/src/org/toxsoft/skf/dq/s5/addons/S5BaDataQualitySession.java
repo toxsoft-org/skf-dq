@@ -13,7 +13,6 @@ import org.toxsoft.core.tslib.bricks.filter.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.dq.lib.*;
 import org.toxsoft.skf.dq.s5.supports.*;
@@ -108,20 +107,6 @@ public class S5BaDataQualitySession
   }
 
   @Override
-  public IGwidList getConnectedResources( boolean aOwnIncluded, boolean aNotOwnIncluded ) {
-    Skid sessionId = sessionID();
-    IMap<Skid, IGwidList> connected = dataQualitySupport.getConnectedResources();
-    GwidList retValue = new GwidList();
-    for( Skid id : connected.keys() ) {
-      boolean isOwnSession = sessionId.equals( id );
-      if( isOwnSession && aOwnIncluded || !isOwnSession && aNotOwnIncluded ) {
-        retValue.addAll( connected.getByKey( id ) );
-      }
-    }
-    return retValue;
-  }
-
-  @Override
   public void addConnectedResources( IGwidList aResources ) {
     TsNullArgumentRtException.checkNull( aResources );
     dataQualitySupport.addConnectedResources( sessionID(), aResources );
@@ -144,6 +129,12 @@ public class S5BaDataQualitySession
   public void setMarkValue( String aTicketId, IAtomicValue aValue, IGwidList aResources ) {
     TsNullArgumentRtException.checkNulls( aTicketId, aValue, aResources );
     dataQualitySupport.setMarkValue( aTicketId, aValue, aResources );
+  }
+
+  @Override
+  public void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
+    TsNullArgumentRtException.checkNulls( aTicketId, aValues );
+    dataQualitySupport.setMarkValues( aTicketId, aValues );
   }
 
   @Override

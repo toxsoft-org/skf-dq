@@ -228,11 +228,6 @@ public class SkDataQualityService
   }
 
   @Override
-  public IGwidList getConnectedResources( boolean aOwnIncluded, boolean aNotOwnIncluded ) {
-    return backend().getConnectedResources( aOwnIncluded, aNotOwnIncluded );
-  }
-
-  @Override
   public void addConnectedResources( IGwidList aResources ) {
     TsNullArgumentRtException.checkNull( aResources );
     backend().addConnectedResources( aResources );
@@ -254,6 +249,12 @@ public class SkDataQualityService
   public void setMarkValue( String aTicketId, IAtomicValue aValue, IGwidList aResources ) {
     TsNullArgumentRtException.checkNulls( aTicketId, aValue, aResources );
     backend().setMarkValue( aTicketId, aValue, aResources );
+  }
+
+  @Override
+  public void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
+    TsNullArgumentRtException.checkNulls( aTicketId, aValues );
+    backend().setMarkValues( aTicketId, aValues );
   }
 
   @Override

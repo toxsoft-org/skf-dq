@@ -16,6 +16,7 @@ interface IS5Resources {
   String STR_D_NOT_CONNECTED = "Нет связи с поставщиком данного";
   String STR_N_NOT_CONNECTED = "Нет связи";
 
+  String STR_SESSION_NA = "N/A";
   // ------------------------------------------------------------------------------------
   // Строки сообщений
   //

@@ -78,11 +78,6 @@ public final class S5BaDataQualityRemote
   }
 
   @Override
-  public IGwidList getConnectedResources( boolean aOwnIncluded, boolean aNotOwnIncluded ) {
-    return session().getConnectedResources( aOwnIncluded, aNotOwnIncluded );
-  }
-
-  @Override
   public void addConnectedResources( IGwidList aResources ) {
     TsNullArgumentRtException.checkNull( aResources );
     session().addConnectedResources( aResources );
@@ -104,6 +99,12 @@ public final class S5BaDataQualityRemote
   public void setMarkValue( String aTicketId, IAtomicValue aValue, IGwidList aResources ) {
     TsNullArgumentRtException.checkNulls( aTicketId, aValue, aResources );
     session().setMarkValue( aTicketId, aValue, aResources );
+  }
+
+  @Override
+  public void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
+    TsNullArgumentRtException.checkNulls( aTicketId, aValues );
+    session().setMarkValues( aTicketId, aValues );
   }
 
   @Override

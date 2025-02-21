@@ -108,31 +108,8 @@ public interface IS5BackendDataQualitySingleton
    * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
    * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
    * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
-   * @deprecated использовать {@link #getConnectedResources()}.
    */
-  @Deprecated
   IGwidList getConnectedResources( Skid aSessionID );
-
-  /**
-   * Возвращает карту ресурсов
-   * <p>
-   * {@link Gwid} ресурсов представляют данные объектов. Примеры возможных {@link Gwid}:
-   * <ul>
-   * <li>CtPot[potObj1]$rtdata( alive ).</li>
-   * <li>CtPot[potObj1]$rtdata( * ).</li>
-   * <li>CtPot[*]$rtdata( alive ).</li>
-   * <li>CtPot[*]$rtdata( * ).</li>
-   * </ul>
-   *
-   * @return {@link IMap}&lt;{@link IGwidList}&gt; карта ресурсов. <br>
-   *         Ключ: идентификатор сессии которая представляет ресурсы. <br>
-   *         Значение: список ресурсов предоставляемых сессией.
-   * @throws TsNullArgumentRtException любой аргумент = null
-   * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
-   * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
-   * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
-   */
-  IMap<Skid, IGwidList> getConnectedResources();
 
   /**
    * Извещает службу о том, что за поставку ресурсов отвечает указанная сессия.
@@ -253,7 +230,7 @@ public interface IS5BackendDataQualitySingleton
    * @throws TsNullArgumentRtException любой аргумент = null
    * @throws TsIllegalStateRtException идентификатор тикета не ИД-путь
    * @throws TsItemNotFoundRtException нет такого тикета
-   * @throws TsIllegalArgumentRtException такет является встроенным
+   * @throws TsIllegalArgumentRtException тикет является встроенным
    * @throws AvTypeCastRtException значение имеет тип, несовместимый с заявленным в
    *           {@link ISkDataQualityTicket#dataType()}
    * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
@@ -261,6 +238,37 @@ public interface IS5BackendDataQualitySingleton
    * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
    */
   void setMarkValue( String aTicketId, IAtomicValue aValue, IGwidList aResources );
+
+  /**
+   * Задает значения пометок пользовательскими (не встроенными) ярлыками.
+   * <p>
+   * Если среди aResources есть ресурсы, не присутствующие в списке отслеживаемых (регистрацию ресурсов смотри
+   * {@link #getConnectedResources(Skid)}), то они молча игнорируются.
+   * <p>
+   * {@link Gwid} ресурсов должны представлять данные объектов. Абстрактные {@link Gwid} (без объекта(ов)) не
+   * допускаются. Примеры возможных {@link Gwid}:
+   * <ul>
+   * <li>CtPot[potObj1]$rtdata( alive ).</li>
+   * <li>CtPot[potObj1]$rtdata( * ).</li>
+   * <li>CtPot[*]$rtdata( alive ).</li>
+   * <li>CtPot[*]$rtdata( * ).</li>
+   * </ul>
+   *
+   * @param aTicketId String идентификатор тикета (ИД-путь)
+   * @param aValues {@link IAtomicValue} карта значений тикета.<br>
+   *          Ключ: идентификатор данного.<br>
+   *          Значение: значение тикета.
+   * @throws TsNullArgumentRtException любой аргумент = null
+   * @throws TsIllegalStateRtException идентификатор тикета не ИД-путь
+   * @throws TsItemNotFoundRtException нет такого тикета
+   * @throws TsIllegalArgumentRtException тикет является встроенным
+   * @throws AvTypeCastRtException значение имеет тип, несовместимый с заявленным в
+   *           {@link ISkDataQualityTicket#dataType()}
+   * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
+   * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
+   * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
+   */
+  void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues );
 
   // ------------------------------------------------------------------------------------
   // Управление тикетами

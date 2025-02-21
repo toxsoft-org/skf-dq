@@ -241,29 +241,6 @@ public class S5BackendDataQualitySingleton
 
   @Override
   @TransactionAttribute( TransactionAttributeType.SUPPORTS )
-  public IMap<Skid, IGwidList> getConnectedResources() {
-    IMapEdit<Skid, IGwidList> retValue = new ElemMap<>();
-    try( CloseableIterator<Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>>> iterator =
-        marksByGwidsCache.entrySet().iterator() ) {
-      while( iterator.hasNext() ) {
-        Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>> entry = iterator.next();
-        Gwid gwid = entry.getKey();
-        Set<Skid> sessionIds = entry.getValue().left();
-        for( Skid sessionId : sessionIds ) {
-          GwidList gwids = (GwidList)retValue.findByKey( sessionId );
-          if( gwids == null ) {
-            gwids = new GwidList();
-            retValue.put( sessionId, gwids );
-          }
-          gwids.add( gwid );
-        }
-      }
-    }
-    return retValue;
-  }
-
-  @Override
-  @TransactionAttribute( TransactionAttributeType.SUPPORTS )
   public GwidList getConnectedResources( Skid aSessionID ) {
     TsNullArgumentRtException.checkNull( aSessionID );
     IListEdit<Gwid> retValue = new ElemLinkedList<>();
@@ -370,13 +347,13 @@ public class S5BackendDataQualitySingleton
         // Недопустимое значение метки для тикета
         throw new TsIllegalArgumentRtException( ERR_WRONG_TICKET_MARK, aValue, valueType, aTicketId, ticketType );
       }
-      // Разгруппировка ugwi
-      IGwidList gwids = ungroupGwids( coreApi(), aResources );
       // Сессия
       SessionID sessionID = null;
       // Журналирование
       logger().info( MSG_SET_MARK, aTicketId, aValue, Integer.valueOf( aResources.size() ), sessionID,
           toString( aResources ) );
+      // Разгруппировка ugwi
+      IGwidList gwids = ungroupGwids( coreApi(), aResources );
       // Проход по всем ресурсам с установкой тикета значения тикета
       for( Gwid gwid : gwids ) {
         Pair<Set<Skid>, IOptionSetEdit> entry = marksByGwidsCache.get( gwid );
@@ -393,6 +370,62 @@ public class S5BackendDataQualitySingleton
         needSendEvent = true;
         // Журналирование
         logger().debug( MSG_SET_MARK_RESOURCE, gwid, aTicketId, aValue, sessionID );
+      }
+    }
+    finally {
+      unlockWrite( lock );
+    }
+    if( needSendEvent ) {
+      fireResourceChangedEvent( backend().attachedFrontends(), aTicketId );
+    }
+  }
+
+  @Override
+  public void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
+    TsNullArgumentRtException.checkNulls( aTicketId, aValues );
+
+    StridUtils.checkValidIdPath( aTicketId );
+    // Признак необходимости формирования события
+    boolean needSendEvent = false;
+    lockWrite( lock );
+    try {
+      ISkDataQualityTicket ticket = registeredTickets.findByKey( aTicketId );
+      if( ticket == null ) {
+        // Тикет не зарегистрирован
+        throw new TsIllegalArgumentRtException( ERR_TICKET_NOT_FOUND, aTicketId );
+      }
+      if( ticket.isBuiltin() ) {
+        // Попытка установки метки встроенного тикета
+        throw new TsIllegalArgumentRtException( ERR_MARK_BUILTIN_TICKET, aTicketId );
+      }
+      // Тип значений метки
+      EAtomicType ticketType = ticket.dataType().atomicType();
+      for( Gwid gwid2 : aValues.keys() ) {
+        IAtomicValue value = aValues.getByKey( gwid2 );
+        EAtomicType valueType = value.atomicType();
+        if( valueType != NONE && ticketType != NONE && valueType != ticketType ) {
+          // Недопустимое значение метки для тикета
+          throw new TsIllegalArgumentRtException( ERR_WRONG_TICKET_MARK, value, valueType, aTicketId, ticketType );
+        }
+        // Разгруппировка ugwi
+        IGwidList gwids = ungroupGwid( coreApi(), gwid2 );
+        // Проход по всем ресурсам с установкой тикета значения тикета
+        for( Gwid gwid : gwids ) {
+          Pair<Set<Skid>, IOptionSetEdit> entry = marksByGwidsCache.get( gwid );
+          if( entry == null ) {
+            // Игнорирование попытки установить тикет для ресурса с которым нет связи
+            logger().warning( ERR_IGNORE_TICKET_FOR_UNDEF_RESOURCE, aTicketId, value, gwid );
+            continue;
+          }
+          // Установка значения в наборе IOptionSetEdit
+          entry.right().setValue( ticket.id(), value );
+          // Обновление кэша
+          marksByGwidsCache.put( gwid, entry );
+          // Требование отправки события
+          needSendEvent = true;
+          // Журналирование
+          logger().debug( MSG_SET_MARK_RESOURCE, gwid, aTicketId, value, STR_SESSION_NA );
+        }
       }
     }
     finally {
