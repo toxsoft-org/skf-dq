@@ -8,6 +8,7 @@ import org.toxsoft.core.tslib.bricks.filter.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.dq.lib.*;
 import org.toxsoft.skf.dq.s5.supports.*;
@@ -91,7 +92,7 @@ public final class S5BaDataQualityLocal
 
   @Override
   public IGwidList getConnectedResources() {
-    return dataQualitySupport.getConnectedResources( sessionID() );
+    return dataQualitySupport.getConnectedResources( Skid.NONE );
   }
 
   @Override
