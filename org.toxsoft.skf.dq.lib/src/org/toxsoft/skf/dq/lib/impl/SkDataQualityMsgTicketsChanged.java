@@ -1,10 +1,9 @@
 package org.toxsoft.skf.dq.lib.impl;
 
-import org.toxsoft.core.tslib.bricks.events.msg.GtMessage;
-import org.toxsoft.core.tslib.utils.errors.TsNullArgumentRtException;
-import org.toxsoft.skf.dq.lib.IBaDataQuality;
-import org.toxsoft.skf.dq.lib.ISkDataQualityService;
-import org.toxsoft.uskat.core.backend.api.AbstractBackendMessageBuilder;
+import org.toxsoft.core.tslib.bricks.events.msg.*;
+import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.dq.lib.*;
+import org.toxsoft.uskat.core.backend.api.*;
 
 /**
  * {@link IBaDataQuality} message builder: change tickets notification.
@@ -35,6 +34,6 @@ public class SkDataQualityMsgTicketsChanged
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    */
   public GtMessage makeMessage() {
-    return makeMessage();
+    return makeMessageVarargs();
   }
 }
