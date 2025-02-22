@@ -43,7 +43,6 @@ import org.toxsoft.skf.dq.s5.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.s5.server.backend.impl.*;
 import org.toxsoft.uskat.s5.server.backend.supports.core.*;
-import org.toxsoft.uskat.s5.server.frontend.*;
 import org.toxsoft.uskat.s5.server.sessions.*;
 import org.toxsoft.uskat.s5.utils.threads.impl.*;
 
@@ -273,7 +272,7 @@ public class S5BackendDataQualitySingleton
     Boolean needEvent = Boolean.valueOf( needSendEvent );
     logger().info( MSG_ADD_SESSION_RESOURCES, aSessionID, size, needEvent );
     if( needSendEvent ) {
-      fireResourceChangedEvent( backend().attachedFrontends(), notConnectedTicket.id() );
+      fireResourceChangedEvent( backend(), notConnectedTicket.id() );
     }
   }
 
@@ -293,7 +292,7 @@ public class S5BackendDataQualitySingleton
     Boolean needEvent = Boolean.valueOf( needSendEvent );
     logger().info( MSG_REMOVE_SESSION_RESOURCES, aSessionID, size, needEvent );
     if( needSendEvent ) {
-      fireResourceChangedEvent( backend().attachedFrontends(), notConnectedTicket.id() );
+      fireResourceChangedEvent( backend(), notConnectedTicket.id() );
     }
   }
 
@@ -318,7 +317,7 @@ public class S5BackendDataQualitySingleton
     Boolean needEvent = Boolean.valueOf( needSendEvent );
     logger().info( MSG_SET_SESSION_RESOURCES, aSessionID, prevSize, newSize, needEvent );
     if( needSendEvent ) {
-      fireResourceChangedEvent( backend().attachedFrontends(), notConnectedTicket.id() );
+      fireResourceChangedEvent( backend(), notConnectedTicket.id() );
     }
     return retValue;
   }
@@ -376,7 +375,7 @@ public class S5BackendDataQualitySingleton
       unlockWrite( lock );
     }
     if( needSendEvent ) {
-      fireResourceChangedEvent( backend().attachedFrontends(), aTicketId );
+      fireResourceChangedEvent( backend(), aTicketId );
     }
   }
 
@@ -432,7 +431,7 @@ public class S5BackendDataQualitySingleton
       unlockWrite( lock );
     }
     if( needSendEvent ) {
-      fireResourceChangedEvent( backend().attachedFrontends(), aTicketId );
+      fireResourceChangedEvent( backend(), aTicketId );
     }
   }
 
@@ -624,7 +623,7 @@ public class S5BackendDataQualitySingleton
       unlockWrite( lock );
     }
     if( needSendEvent ) {
-      fireTicketsChangedEvent( backend().attachedFrontends() );
+      fireTicketsChangedEvent( backend() );
     }
   }
 
@@ -757,30 +756,26 @@ public class S5BackendDataQualitySingleton
   /**
    * Формирует событие "изменение состояния ресурса"
    *
-   * @param aFrontends {@link IList}&lt;{@link IS5FrontendRear}&gt; список фронтендов
+   * @param aBackend {@link IS5BackendCoreSingleton} бекенд s5-сервера
    * @param aResourceId String идентификатор ресурса
    * @throws TsNullArgumentRtException любой аргумент = null
    */
-  private static void fireResourceChangedEvent( IList<IS5FrontendRear> aFrontends, String aResourceId ) {
-    TsNullArgumentRtException.checkNulls( aFrontends, aResourceId );
+  private static void fireResourceChangedEvent( IS5BackendCoreSingleton aBackend, String aResourceId ) {
+    TsNullArgumentRtException.checkNulls( aBackend, aResourceId );
     GtMessage msg = SkDataQualityMsgResourceChanged.INSTANCE.makeMessage( aResourceId );
-    for( IS5FrontendRear frontend : aFrontends ) {
-      frontend.onBackendMessage( msg );
-    }
+    aBackend.fireBackendMessage( msg );
   }
 
   /**
    * Формирует событие "изменение состояния ярлыков"
    *
-   * @param aFrontends {@link IList}&lt;{@link IS5FrontendRear}&gt; список фронтендов
+   * @param aBackend {@link IS5BackendCoreSingleton} бекенд s5-сервера
    * @throws TsNullArgumentRtException любой аргумент = null
    */
-  private static void fireTicketsChangedEvent( IList<IS5FrontendRear> aFrontends ) {
-    TsNullArgumentRtException.checkNulls( aFrontends );
+  private static void fireTicketsChangedEvent( IS5BackendCoreSingleton aBackend ) {
+    TsNullArgumentRtException.checkNull( aBackend );
     GtMessage msg = SkDataQualityMsgTicketsChanged.INSTANCE.makeMessage();
-    for( IS5FrontendRear frontend : aFrontends ) {
-      frontend.onBackendMessage( msg );
-    }
+    aBackend.fireBackendMessage( msg );
   }
 
   /**
