@@ -380,7 +380,7 @@ public class S5BackendDataQualitySingleton
   }
 
   @Override
-  public void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
+  public void setConnectedAndMarkValues( Skid aSessionID, String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
     TsNullArgumentRtException.checkNulls( aTicketId, aValues );
 
     StridUtils.checkValidIdPath( aTicketId );
@@ -412,9 +412,11 @@ public class S5BackendDataQualitySingleton
         for( Gwid gwid : gwids ) {
           Pair<Set<Skid>, IOptionSetEdit> entry = marksByGwidsCache.get( gwid );
           if( entry == null ) {
-            // Игнорирование попытки установить тикет для ресурса с которым нет связи
-            logger().warning( ERR_IGNORE_TICKET_FOR_UNDEF_RESOURCE, aTicketId, value, gwid );
-            continue;
+            entry = new Pair<>( new HashSet<>(), new OptionSet() );
+            // Добавление идентификатора сессии поставлямая значения данных
+            entry.left().add( aSessionID );
+            // Установка значения метки "notConnected"
+            entry.right().setValue( notConnectedTicket.id(), AV_FALSE );
           }
           // Установка значения в наборе IOptionSetEdit
           entry.right().setValue( ticket.id(), value );

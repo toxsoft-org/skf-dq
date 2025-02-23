@@ -270,8 +270,10 @@ public interface ISkDataQualityService
    * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
    * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
    * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
+   * @deprecated метод для обхода недостатка реализации службы (требуется переработка синглетона службы, частично API).
    */
-  void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues );
+  @Deprecated
+  void setConnectedAndMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues );
 
   // ------------------------------------------------------------------------------------
   // Управление тикетами

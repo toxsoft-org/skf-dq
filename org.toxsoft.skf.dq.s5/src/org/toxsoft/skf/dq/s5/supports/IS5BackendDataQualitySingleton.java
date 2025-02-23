@@ -254,6 +254,7 @@ public interface IS5BackendDataQualitySingleton
    * <li>CtPot[*]$rtdata( * ).</li>
    * </ul>
    *
+   * @param aSessionID {@link Skid} сессия в которой устанавливаются значения
    * @param aTicketId String идентификатор тикета (ИД-путь)
    * @param aValues {@link IAtomicValue} карта значений тикета.<br>
    *          Ключ: идентификатор данного.<br>
@@ -268,7 +269,7 @@ public interface IS5BackendDataQualitySingleton
    * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
    * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
    */
-  void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues );
+  void setConnectedAndMarkValues( Skid aSessionID, String aTicketId, IMap<Gwid, IAtomicValue> aValues );
 
   // ------------------------------------------------------------------------------------
   // Управление тикетами

@@ -133,9 +133,9 @@ public class S5BaDataQualitySession
   }
 
   @Override
-  public void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
+  public void setConnectedAndMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
     TsNullArgumentRtException.checkNulls( aTicketId, aValues );
-    dataQualitySupport.setMarkValues( aTicketId, aValues );
+    dataQualitySupport.setConnectedAndMarkValues( sessionID(), aTicketId, aValues );
   }
 
   @Override

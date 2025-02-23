@@ -253,7 +253,7 @@ public interface IBaDataQuality {
    * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
    * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного
    */
-  void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues );
+  void setConnectedAndMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues );
 
   // ------------------------------------------------------------------------------------
   // Управление тикетами

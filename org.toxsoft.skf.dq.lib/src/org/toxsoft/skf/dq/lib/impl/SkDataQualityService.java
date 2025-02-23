@@ -252,9 +252,9 @@ public class SkDataQualityService
   }
 
   @Override
-  public void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
+  public void setConnectedAndMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
     TsNullArgumentRtException.checkNulls( aTicketId, aValues );
-    backend().setMarkValues( aTicketId, aValues );
+    backend().setConnectedAndMarkValues( aTicketId, aValues );
   }
 
   @Override

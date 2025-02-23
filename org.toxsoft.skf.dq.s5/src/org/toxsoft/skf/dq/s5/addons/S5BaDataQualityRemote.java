@@ -102,9 +102,9 @@ public final class S5BaDataQualityRemote
   }
 
   @Override
-  public void setMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
+  public void setConnectedAndMarkValues( String aTicketId, IMap<Gwid, IAtomicValue> aValues ) {
     TsNullArgumentRtException.checkNulls( aTicketId, aValues );
-    session().setMarkValues( aTicketId, aValues );
+    session().setConnectedAndMarkValues( aTicketId, aValues );
   }
 
   @Override
