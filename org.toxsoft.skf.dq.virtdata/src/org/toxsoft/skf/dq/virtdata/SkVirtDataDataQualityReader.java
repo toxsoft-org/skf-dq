@@ -117,9 +117,7 @@ public class SkVirtDataDataQualityReader
   //
   @Override
   public void onResourcesStateChanged( ISkDataQualityService aSource, String aTicketId ) {
-    if( aTicketId.equals( ISkDataQualityService.TICKET_ID_NO_CONNECTION ) ) {
-      changeListener.onGenericChangeEvent( this );
-    }
+    changeListener.onGenericChangeEvent( this );
   }
 
   // ------------------------------------------------------------------------------------
