@@ -428,6 +428,9 @@ public class S5BackendDataQualitySingleton
           logger().debug( MSG_SET_MARK_RESOURCE, gwid, aTicketId, value, STR_SESSION_NA );
         }
       }
+      // Регистрация поставщика ресурсов
+      logger().info( MSG_SET_CONNECTED_VENDOR, Integer.valueOf( aValues.size() ), aSessionID,
+          toString( aValues.keys() ) );
     }
     finally {
       unlockWrite( lock );
@@ -787,7 +790,7 @@ public class S5BackendDataQualitySingleton
    * @return String строка представления значений текущих данных
    * @throws TsNullArgumentRtException аргумент = null
    */
-  private static String toString( IGwidList aResources ) {
+  private static String toString( IList<Gwid> aResources ) {
     TsNullArgumentRtException.checkNulls( aResources );
     StringBuilder sb = new StringBuilder();
     for( Gwid gwid : aResources ) {
