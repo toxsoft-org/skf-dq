@@ -49,7 +49,7 @@ final class SkNetNodeRtdHealthWriter
   SkNetNodeRtdHealthWriter( ISkCoreApi aCoreApi, Skid aNetNodeId, IGwidList aHealthIds, IIntList aWeigths ) {
     super( aCoreApi, Gwid.createRtdata( aNetNodeId.classId(), aNetNodeId.strid(), ISkNetNode.RTDID_HEALTH ) );
     TsNullArgumentRtException.checkNulls( aHealthIds, aWeigths );
-    if( aHealthIds.size() == aWeigths.size() ) {
+    if( aHealthIds.size() != aWeigths.size() ) {
       Integer h = Integer.valueOf( aHealthIds.size() );
       Integer w = Integer.valueOf( aWeigths.size() );
       throw new TsIllegalArgumentRtException( ERR_DIMENSION_IS_NOT_EQUAL, aNetNodeId, h, w );
