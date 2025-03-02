@@ -10,6 +10,7 @@ import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.threadexec.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -53,23 +54,28 @@ public class SkNetNodeSkatlet
       while( true ) {
         int index = i++;
         IAtomicValue id = configs.findValue( NETNODE_ID_PREFIX + index );
-        IAtomicValue resources = configs.findValue( NETNODE_RESOURCES_PREFIX + index );
-        if( id == null && resources == null ) {
+        IAtomicValue healths = configs.findValue( NETNODE_HEALTHS_PREFIX + index );
+        IAtomicValue weights = configs.findValue( NETNODE_WEIGHTS_PREFIX + index );
+        if( id == null && healths == null && weights == null ) {
           break;
         }
         if( id == null ) {
           throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_ID_PREFIX + index );
         }
-        if( resources == null ) {
-          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_RESOURCES_PREFIX + index );
+        if( healths == null ) {
+          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_HEALTHS_PREFIX + index );
         }
-        Skid netNodeId = id.asValobj();
-        IGwidList netNodeResources = resources.asValobj();
-        if( !coreApi.sysdescr().hierarchy().isAssignableFrom( ISkNetNode.CLASS_ID, netNodeId.classId() ) ) {
+        if( weights == null ) {
+          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_WEIGHTS_PREFIX + index );
+        }
+        Skid nodeId = id.asValobj();
+        IGwidList nodeHealths = healths.asValobj();
+        IIntList nodeWeights = weights.asValobj();
+        if( !coreApi.sysdescr().hierarchy().isAssignableFrom( ISkNetNode.CLASS_ID, nodeId.classId() ) ) {
           throw new TsIllegalArgumentRtException();
         }
-        writers.add( new SkNetNodeRtdHealthWriter( coreApi, netNodeId, netNodeResources ) );
-        writers.add( new SkNetNodeRtdOnlineWriter( coreApi, netNodeId ) );
+        writers.add( new SkNetNodeRtdHealthWriter( coreApi, nodeId, nodeHealths, nodeWeights ) );
+        writers.add( new SkNetNodeRtdOnlineWriter( coreApi, nodeId ) );
       }
       // Register dataquality list
       GwidList writeDataIds = new GwidList();

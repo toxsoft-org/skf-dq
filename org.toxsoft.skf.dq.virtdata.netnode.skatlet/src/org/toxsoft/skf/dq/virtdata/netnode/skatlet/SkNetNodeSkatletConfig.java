@@ -1,8 +1,10 @@
 package org.toxsoft.skf.dq.virtdata.netnode.skatlet;
 
 import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.uskat.classes.*;
 import org.toxsoft.uskat.s5.server.backend.supports.skatlets.*;
 
 /**
@@ -34,27 +36,32 @@ public final class SkNetNodeSkatletConfig {
   public static final String NETNODE_ID_PREFIX = SYBSYSTEM_ID_PREFIX + ".skid";
 
   /**
-   * Префикс имен параметров "список идентификаторов ресурсов подключаемых к сетевому узлу ISkNetNode".
+   * Префикс имен параметров списка конкретных ({@link Gwid#isAbstract()}=false) идентификаторов ресурсов представляющих
+   * параметр "Интегральная оценка состояния подключенных узлов" {@link ISkNetNode#RTDID_HEALTH} (или его аналога в
+   * другом классе) у подключенных к сетевому узлу ресурсов.
    * <p>
    * Тип: {@link EAtomicType#VALOBJ} ({@link IGwidList}).
    * <p>
    * Пример: <code>
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.skid0=@Skid[sk.Server[valcom.main]]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.resources0=@GwidList[sk.Server[valcom.local0]$rtdata(online),sk.Server[valcom.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.healths=@GwidList[sk.Server[valcom.local0]$rtdata(health),sk.Server[valcom.local1]$rtdata(health)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.weights=@IntList[ 35, 65 ]
    * </code>
    */
-  public static final String NETNODE_RESOURCES_PREFIX = SYBSYSTEM_ID_PREFIX + ".resources";
+  public static final String NETNODE_HEALTHS_PREFIX = SYBSYSTEM_ID_PREFIX + ".healths";
 
-  // /**
-  // * Требование обновить системное описание согласно указанной конфигурации узлов.
-  // * <p>
-  // * Тип: {@link EAtomicType}({@link IGwidList}).
-  // */
-  // public static final IDataDef UPDATE_SYSDESCR = create( SYBSYSTEM_ID_PREFIX + ".updateSysdescr", BOOLEAN, //
-  // TSID_NAME, STR_UPDATE_SYSDESCR, //
-  // TSID_DESCRIPTION, STR_UPDATE_SYSDESCR_D, //
-  // TSID_DEFAULT_VALUE, avBool( false ), //
-  // TSID_IS_MANDATORY, AV_FALSE //
-  // );
+  /**
+   * Префикс имен параметров списка весов параметра {@link ISkNetNode#RTDID_HEALTH} (или его аналога в другом классе) у
+   * подключенных к сетевому узлу ресурсов при рассчете собственного {@link ISkNetNode#RTDID_HEALTH}.
+   * <p>
+   * Тип: {@link EAtomicType#VALOBJ} ({@link IIntList}).
+   * <p>
+   * Пример: <code>
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.skid0=@Skid[sk.Server[valcom.main]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.healths=@GwidList[sk.Server[valcom.local0]$rtdata(health),sk.Server[valcom.local1]$rtdata(health)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.weights=@IntList[ 35, 65 ]
+   * </code>
+   */
+  public static final String NETNODE_WEIGHTS_PREFIX = SYBSYSTEM_ID_PREFIX + ".weights";
 
 }
