@@ -1,6 +1,7 @@
 package org.toxsoft.skf.dq.virtdata.netnode.skatlet;
 
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+import static org.toxsoft.skf.dq.virtdata.netnode.skatlet.ISkResources.*;
 
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.opset.*;
@@ -48,7 +49,11 @@ final class SkNetNodeRtdHealthWriter
   SkNetNodeRtdHealthWriter( ISkCoreApi aCoreApi, Skid aNetNodeId, IGwidList aHealthIds, IIntList aWeigths ) {
     super( aCoreApi, Gwid.createRtdata( aNetNodeId.classId(), aNetNodeId.strid(), ISkNetNode.RTDID_HEALTH ) );
     TsNullArgumentRtException.checkNulls( aHealthIds, aWeigths );
-    TsIllegalArgumentRtException.checkFalse( aHealthIds.size() == aWeigths.size() );
+    if( aHealthIds.size() == aWeigths.size() ) {
+      Integer h = Integer.valueOf( aHealthIds.size() );
+      Integer w = Integer.valueOf( aWeigths.size() );
+      throw new TsIllegalArgumentRtException( ERR_DIMENSION_IS_NOT_EQUAL, aNetNodeId, h, w );
+    }
     for( Gwid health : aHealthIds ) {
       TsIllegalArgumentRtException.checkTrue( health.isAbstract() );
     }

@@ -18,5 +18,6 @@ interface ISkResources {
   String STR_RTD_HEALTH_GWID_D =
       "Идентификатор текущего данного представляющего интегральную оценку состояния подключенных ресурсов.";
 
-  String ERR_NOT_FOUND = "%s is not found";
+  String ERR_NOT_FOUND              = "%s is not found";
+  String ERR_DIMENSION_IS_NOT_EQUAL = "skid = %s, dimension is not equal: healths = %d, weights = %d";
 }
