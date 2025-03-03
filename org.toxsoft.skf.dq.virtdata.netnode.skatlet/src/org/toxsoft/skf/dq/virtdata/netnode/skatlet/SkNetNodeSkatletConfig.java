@@ -3,7 +3,6 @@ package org.toxsoft.skf.dq.virtdata.netnode.skatlet;
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.uskat.classes.*;
 import org.toxsoft.uskat.s5.server.backend.supports.skatlets.*;
 
@@ -22,18 +21,6 @@ public final class SkNetNodeSkatletConfig {
    * предопределенное значение.
    */
   public static final String SYBSYSTEM_ID_PREFIX = S5BackendSkatletsConfig.SYBSYSTEM_ID_PREFIX + ".virtdata.netnode";
-
-  /**
-   * Префикс имен параметров "идентификатор сетевого узла ISkNetNode".
-   * <p>
-   * Тип: {@link EAtomicType#VALOBJ} ({@link Skid}).
-   * <p>
-   * Пример: <code>
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.skid0=@Skid[sk.Server[valcom.main]]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.resources0=@GwidList[sk.Server[valcom.local0]$rtdata(online),sk.Server[valcom.local1]$rtdata(online)]]
-   * </code>
-   */
-  public static final String NETNODE_ID_PREFIX = SYBSYSTEM_ID_PREFIX + ".skid";
 
   /**
    * Префикс имени параметра конкретного ({@link Gwid#isAbstract()}=false) идентификатора ресурса представляющего
