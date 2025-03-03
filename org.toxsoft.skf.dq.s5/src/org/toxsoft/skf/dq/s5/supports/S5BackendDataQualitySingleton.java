@@ -7,7 +7,6 @@ import static org.toxsoft.skf.dq.s5.supports.IS5Resources.*;
 import static org.toxsoft.skf.dq.s5.supports.S5DataQualityServiceUtils.*;
 import static org.toxsoft.skf.dq.s5.supports.S5DataQualitySupportConfig.*;
 import static org.toxsoft.uskat.s5.server.IS5ImplementConstants.*;
-import static org.toxsoft.uskat.s5.utils.threads.impl.S5Lockable.*;
 
 import java.util.*;
 import java.util.Map.*;
@@ -44,7 +43,6 @@ import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.s5.server.backend.impl.*;
 import org.toxsoft.uskat.s5.server.backend.supports.core.*;
 import org.toxsoft.uskat.s5.server.sessions.*;
-import org.toxsoft.uskat.s5.utils.threads.impl.*;
 
 /**
  * Реализация {@link IS5BackendDataQualitySingleton}.
@@ -124,7 +122,7 @@ public class S5BackendDataQualitySingleton
   /**
    * Блокировка доступа к данным класса
    */
-  private final S5Lockable lock = new S5Lockable();
+  // private final S5Lockable lock = new S5Lockable();
 
   static {
     // Регистрация хранителей данных
@@ -201,21 +199,21 @@ public class S5BackendDataQualitySingleton
       // Ресурс указанный через групповой идентификатор(Gwid.isMulti() == true) не допускается
       throw new TsIllegalArgumentRtException( ERR_MULTI_RESOURCE_NOT_ALLOWED, aResource );
     }
-    lockRead( lock );
-    try {
-      Pair<Set<Skid>, IOptionSetEdit> retValue = marksByGwidsCache.get( aResource );
-      if( retValue == null ) {
-        // В данный момент с ресурсом не установлена связь
-        IOptionSetEdit marks = new OptionSet();
-        // Установка маркера "нет связи"
-        marks.setValue( notConnectedTicket.id(), AV_TRUE );
-        return marks;
-      }
-      return retValue.right();
+    // lockRead( lock );
+    // try {
+    Pair<Set<Skid>, IOptionSetEdit> retValue = marksByGwidsCache.get( aResource );
+    if( retValue == null ) {
+      // В данный момент с ресурсом не установлена связь
+      IOptionSetEdit marks = new OptionSet();
+      // Установка маркера "нет связи"
+      marks.setValue( notConnectedTicket.id(), AV_TRUE );
+      return marks;
     }
-    finally {
-      unlockRead( lock );
-    }
+    return retValue.right();
+    // }
+    // finally {
+    // unlockRead( lock );
+    // }
   }
 
   @Override
@@ -261,13 +259,13 @@ public class S5BackendDataQualitySingleton
     TsNullArgumentRtException.checkNulls( aSessionID, aResources );
     // Признак необходимости формирования события
     boolean needSendEvent = false;
-    lockWrite( lock );
-    try {
-      needSendEvent = addResources( aSessionID, aResources );
-    }
-    finally {
-      unlockWrite( lock );
-    }
+    // lockWrite( lock );
+    // try {
+    needSendEvent = addResources( aSessionID, aResources );
+    // }
+    // finally {
+    // unlockWrite( lock );
+    // }
     Integer size = Integer.valueOf( aResources.size() );
     Boolean needEvent = Boolean.valueOf( needSendEvent );
     logger().info( MSG_ADD_SESSION_RESOURCES, aSessionID, size, needEvent );
@@ -281,13 +279,13 @@ public class S5BackendDataQualitySingleton
   public void removeConnectedResources( Skid aSessionID, IGwidList aResources ) {
     // Признак необходимости формирования события
     boolean needSendEvent = false;
-    lockWrite( lock );
-    try {
-      needSendEvent = removeResources( aSessionID, aResources );
-    }
-    finally {
-      unlockWrite( lock );
-    }
+    // lockWrite( lock );
+    // try {
+    needSendEvent = removeResources( aSessionID, aResources );
+    // }
+    // finally {
+    // unlockWrite( lock );
+    // }
     Integer size = Integer.valueOf( aResources.size() );
     Boolean needEvent = Boolean.valueOf( needSendEvent );
     logger().info( MSG_REMOVE_SESSION_RESOURCES, aSessionID, size, needEvent );
@@ -303,15 +301,15 @@ public class S5BackendDataQualitySingleton
     IGwidList retValue = IGwidList.EMPTY;
     // Признак необходимости формирования события
     boolean needSendEvent = false;
-    lockWrite( lock );
-    try {
-      retValue = getConnectedResources( aSessionID );
-      needSendEvent = removeResources( aSessionID, retValue );
-      needSendEvent |= addResources( aSessionID, aResources );
-    }
-    finally {
-      unlockWrite( lock );
-    }
+    // lockWrite( lock );
+    // try {
+    retValue = getConnectedResources( aSessionID );
+    needSendEvent = removeResources( aSessionID, retValue );
+    needSendEvent |= addResources( aSessionID, aResources );
+    // }
+    // finally {
+    // unlockWrite( lock );
+    // }
     Integer prevSize = Integer.valueOf( retValue.size() );
     Integer newSize = Integer.valueOf( aResources.size() );
     Boolean needEvent = Boolean.valueOf( needSendEvent );
@@ -329,51 +327,51 @@ public class S5BackendDataQualitySingleton
     StridUtils.checkValidIdPath( aTicketId );
     // Признак необходимости формирования события
     boolean needSendEvent = false;
-    lockWrite( lock );
-    try {
-      ISkDataQualityTicket ticket = registeredTickets.findByKey( aTicketId );
-      if( ticket == null ) {
-        // Тикет не зарегистрирован
-        throw new TsIllegalArgumentRtException( ERR_TICKET_NOT_FOUND, aTicketId );
+    // lockWrite( lock );
+    // try {
+    ISkDataQualityTicket ticket = registeredTickets.findByKey( aTicketId );
+    if( ticket == null ) {
+      // Тикет не зарегистрирован
+      throw new TsIllegalArgumentRtException( ERR_TICKET_NOT_FOUND, aTicketId );
+    }
+    if( ticket.isBuiltin() ) {
+      // Попытка установки метки встроенного тикета
+      throw new TsIllegalArgumentRtException( ERR_MARK_BUILTIN_TICKET, aTicketId );
+    }
+    EAtomicType valueType = aValue.atomicType();
+    EAtomicType ticketType = ticket.dataType().atomicType();
+    if( valueType != NONE && ticketType != NONE && valueType != ticketType ) {
+      // Недопустимое значение метки для тикета
+      throw new TsIllegalArgumentRtException( ERR_WRONG_TICKET_MARK, aValue, valueType, aTicketId, ticketType );
+    }
+    // Сессия
+    SessionID sessionID = null;
+    // Журналирование
+    logger().info( MSG_SET_MARK, aTicketId, aValue, Integer.valueOf( aResources.size() ), sessionID,
+        toString( aResources ) );
+    // Разгруппировка ugwi
+    IGwidList gwids = ungroupGwids( coreApi(), aResources );
+    // Проход по всем ресурсам с установкой тикета значения тикета
+    for( Gwid gwid : gwids ) {
+      Pair<Set<Skid>, IOptionSetEdit> entry = marksByGwidsCache.get( gwid );
+      if( entry == null ) {
+        // Игнорирование попытки установить тикет для ресурса с которым нет связи
+        logger().warning( ERR_IGNORE_TICKET_FOR_UNDEF_RESOURCE, aTicketId, aValue, gwid );
+        continue;
       }
-      if( ticket.isBuiltin() ) {
-        // Попытка установки метки встроенного тикета
-        throw new TsIllegalArgumentRtException( ERR_MARK_BUILTIN_TICKET, aTicketId );
-      }
-      EAtomicType valueType = aValue.atomicType();
-      EAtomicType ticketType = ticket.dataType().atomicType();
-      if( valueType != NONE && ticketType != NONE && valueType != ticketType ) {
-        // Недопустимое значение метки для тикета
-        throw new TsIllegalArgumentRtException( ERR_WRONG_TICKET_MARK, aValue, valueType, aTicketId, ticketType );
-      }
-      // Сессия
-      SessionID sessionID = null;
+      // Установка значения в наборе IOptionSetEdit
+      entry.right().setValue( ticket.id(), aValue );
+      // Обновление кэша
+      marksByGwidsCache.put( gwid, entry );
+      // Требование отправки события
+      needSendEvent = true;
       // Журналирование
-      logger().info( MSG_SET_MARK, aTicketId, aValue, Integer.valueOf( aResources.size() ), sessionID,
-          toString( aResources ) );
-      // Разгруппировка ugwi
-      IGwidList gwids = ungroupGwids( coreApi(), aResources );
-      // Проход по всем ресурсам с установкой тикета значения тикета
-      for( Gwid gwid : gwids ) {
-        Pair<Set<Skid>, IOptionSetEdit> entry = marksByGwidsCache.get( gwid );
-        if( entry == null ) {
-          // Игнорирование попытки установить тикет для ресурса с которым нет связи
-          logger().warning( ERR_IGNORE_TICKET_FOR_UNDEF_RESOURCE, aTicketId, aValue, gwid );
-          continue;
-        }
-        // Установка значения в наборе IOptionSetEdit
-        entry.right().setValue( ticket.id(), aValue );
-        // Обновление кэша
-        marksByGwidsCache.put( gwid, entry );
-        // Требование отправки события
-        needSendEvent = true;
-        // Журналирование
-        logger().debug( MSG_SET_MARK_RESOURCE, gwid, aTicketId, aValue, sessionID );
-      }
+      logger().debug( MSG_SET_MARK_RESOURCE, gwid, aTicketId, aValue, sessionID );
     }
-    finally {
-      unlockWrite( lock );
-    }
+    // }
+    // finally {
+    // unlockWrite( lock );
+    // }
     if( needSendEvent ) {
       fireResourceChangedEvent( backend(), aTicketId );
     }
@@ -386,55 +384,55 @@ public class S5BackendDataQualitySingleton
     StridUtils.checkValidIdPath( aTicketId );
     // Признак необходимости формирования события
     boolean needSendEvent = false;
-    lockWrite( lock );
-    try {
-      ISkDataQualityTicket ticket = registeredTickets.findByKey( aTicketId );
-      if( ticket == null ) {
-        // Тикет не зарегистрирован
-        throw new TsIllegalArgumentRtException( ERR_TICKET_NOT_FOUND, aTicketId );
-      }
-      if( ticket.isBuiltin() ) {
-        // Попытка установки метки встроенного тикета
-        throw new TsIllegalArgumentRtException( ERR_MARK_BUILTIN_TICKET, aTicketId );
-      }
-      // Тип значений метки
-      EAtomicType ticketType = ticket.dataType().atomicType();
-      for( Gwid gwid2 : aValues.keys() ) {
-        IAtomicValue value = aValues.getByKey( gwid2 );
-        EAtomicType valueType = value.atomicType();
-        if( valueType != NONE && ticketType != NONE && valueType != ticketType ) {
-          // Недопустимое значение метки для тикета
-          throw new TsIllegalArgumentRtException( ERR_WRONG_TICKET_MARK, value, valueType, aTicketId, ticketType );
-        }
-        // Разгруппировка ugwi
-        IGwidList gwids = ungroupGwid( coreApi(), gwid2 );
-        // Проход по всем ресурсам с установкой тикета значения тикета
-        for( Gwid gwid : gwids ) {
-          Pair<Set<Skid>, IOptionSetEdit> entry = marksByGwidsCache.get( gwid );
-          if( entry == null ) {
-            entry = new Pair<>( new HashSet<>(), new OptionSet() );
-            // Добавление идентификатора сессии поставлямая значения данных
-            entry.left().add( aSessionID );
-            // Установка значения метки "notConnected"
-            entry.right().setValue( notConnectedTicket.id(), AV_FALSE );
-          }
-          // Установка значения в наборе IOptionSetEdit
-          entry.right().setValue( ticket.id(), value );
-          // Обновление кэша
-          marksByGwidsCache.put( gwid, entry );
-          // Требование отправки события
-          needSendEvent = true;
-          // Журналирование
-          logger().debug( MSG_SET_MARK_RESOURCE, gwid, aTicketId, value, STR_SESSION_NA );
-        }
-      }
-      // Регистрация поставщика ресурсов
-      logger().info( MSG_SET_CONNECTED_VENDOR, Integer.valueOf( aValues.size() ), aSessionID,
-          toString( aValues.keys() ) );
+    // lockWrite( lock );
+    // try {
+    ISkDataQualityTicket ticket = registeredTickets.findByKey( aTicketId );
+    if( ticket == null ) {
+      // Тикет не зарегистрирован
+      throw new TsIllegalArgumentRtException( ERR_TICKET_NOT_FOUND, aTicketId );
     }
-    finally {
-      unlockWrite( lock );
+    if( ticket.isBuiltin() ) {
+      // Попытка установки метки встроенного тикета
+      throw new TsIllegalArgumentRtException( ERR_MARK_BUILTIN_TICKET, aTicketId );
     }
+    // Тип значений метки
+    EAtomicType ticketType = ticket.dataType().atomicType();
+    for( Gwid gwid2 : aValues.keys() ) {
+      IAtomicValue value = aValues.getByKey( gwid2 );
+      EAtomicType valueType = value.atomicType();
+      if( valueType != NONE && ticketType != NONE && valueType != ticketType ) {
+        // Недопустимое значение метки для тикета
+        throw new TsIllegalArgumentRtException( ERR_WRONG_TICKET_MARK, value, valueType, aTicketId, ticketType );
+      }
+      // Разгруппировка ugwi
+      IGwidList gwids = ungroupGwid( coreApi(), gwid2 );
+      // Проход по всем ресурсам с установкой тикета значения тикета
+      for( Gwid gwid : gwids ) {
+        Pair<Set<Skid>, IOptionSetEdit> entry = marksByGwidsCache.get( gwid );
+        if( entry == null ) {
+          entry = new Pair<>( new HashSet<>(), new OptionSet() );
+          // Добавление идентификатора сессии поставлямая значения данных
+          entry.left().add( aSessionID );
+          // Установка значения метки "notConnected"
+          entry.right().setValue( notConnectedTicket.id(), AV_FALSE );
+        }
+        // Установка значения в наборе IOptionSetEdit
+        entry.right().setValue( ticket.id(), value );
+        // Обновление кэша
+        marksByGwidsCache.put( gwid, entry );
+        // Требование отправки события
+        needSendEvent = true;
+        // Журналирование
+        logger().debug( MSG_SET_MARK_RESOURCE, gwid, aTicketId, value, STR_SESSION_NA );
+      }
+    }
+    // Регистрация поставщика ресурсов
+    logger().info( MSG_SET_CONNECTED_VENDOR, Integer.valueOf( aValues.size() ), aSessionID,
+        toString( aValues.keys() ) );
+    // }
+    // finally {
+    // unlockWrite( lock );
+    // }
     if( needSendEvent ) {
       fireResourceChangedEvent( backend(), aTicketId );
     }
@@ -442,62 +440,62 @@ public class S5BackendDataQualitySingleton
 
   @Override
   public IStridablesList<ISkDataQualityTicket> listTickets() {
-    lockRead( lock );
-    try {
-      return new StridablesList<>( registeredTickets );
-    }
-    finally {
-      unlockRead( lock );
-    }
+    // lockRead( lock );
+    // try {
+    return new StridablesList<>( registeredTickets );
+    // }
+    // finally {
+    // unlockRead( lock );
+    // }
   }
 
   @Override
   @TransactionAttribute( TransactionAttributeType.REQUIRED )
   public ISkDataQualityTicket defineTicket( String aTicketId, String aName, String aDescription, IDataType aDataType ) {
     TsNullArgumentRtException.checkNulls( aTicketId, aName, aDescription, aDataType );
-    lockWrite( lock );
-    try {
-      // Проверка попытки редактирования встроенного тикета
-      ISkDataQualityTicket ticket = registeredTickets.findByKey( aTicketId );
-      if( ticket != null && ticket.isBuiltin() ) {
-        throw new TsIllegalArgumentRtException( ERR_EDIT_BUILTIN_TICKET, ticket.id() );
-      }
-      ISkDataQualityTicket newTicket = new SkDataQualityTicket( aTicketId, aName, aDescription, aDataType );
-      // Сохранение конфигурации
-      IOptionSetEdit config = new OptionSet( configuration() );
-      S5DataQualityTicketList tickets = S5DataQualitySupportConfig.DQ_TICKETS.getValue( config ).asValobj();
-      tickets.add( newTicket );
-      S5DataQualitySupportConfig.DQ_TICKETS.setValue( config, avValobj( tickets ) );
-      // Сохранение настроек в базе данных
-      saveConfiguration( config );
-      return newTicket;
+    // lockWrite( lock );
+    // try {
+    // Проверка попытки редактирования встроенного тикета
+    ISkDataQualityTicket ticket = registeredTickets.findByKey( aTicketId );
+    if( ticket != null && ticket.isBuiltin() ) {
+      throw new TsIllegalArgumentRtException( ERR_EDIT_BUILTIN_TICKET, ticket.id() );
     }
-    finally {
-      unlockWrite( lock );
-    }
+    ISkDataQualityTicket newTicket = new SkDataQualityTicket( aTicketId, aName, aDescription, aDataType );
+    // Сохранение конфигурации
+    IOptionSetEdit config = new OptionSet( configuration() );
+    S5DataQualityTicketList tickets = S5DataQualitySupportConfig.DQ_TICKETS.getValue( config ).asValobj();
+    tickets.add( newTicket );
+    S5DataQualitySupportConfig.DQ_TICKETS.setValue( config, avValobj( tickets ) );
+    // Сохранение настроек в базе данных
+    saveConfiguration( config );
+    return newTicket;
+    // }
+    // finally {
+    // unlockWrite( lock );
+    // }
   }
 
   @Override
   public void removeTicket( String aTicketId ) {
     StridUtils.checkValidIdPath( aTicketId );
-    lockWrite( lock );
-    try {
-      // Проверка попытки редактирования встроенного тикета
-      ISkDataQualityTicket ticket = registeredTickets.findByKey( aTicketId );
-      if( ticket != null && ticket.isBuiltin() ) {
-        throw new TsIllegalArgumentRtException( ERR_EDIT_BUILTIN_TICKET, ticket.id() );
-      }
-      // Сохранение конфигурации
-      IOptionSetEdit config = new OptionSet( configuration() );
-      S5DataQualityTicketList tickets = S5DataQualitySupportConfig.DQ_TICKETS.getValue( config ).asValobj();
-      registeredTickets.removeById( aTicketId );
-      S5DataQualitySupportConfig.DQ_TICKETS.setValue( config, avValobj( tickets ) );
-      // Сохранение настроек в базе данных
-      saveConfiguration( config );
+    // lockWrite( lock );
+    // try {
+    // Проверка попытки редактирования встроенного тикета
+    ISkDataQualityTicket ticket = registeredTickets.findByKey( aTicketId );
+    if( ticket != null && ticket.isBuiltin() ) {
+      throw new TsIllegalArgumentRtException( ERR_EDIT_BUILTIN_TICKET, ticket.id() );
     }
-    finally {
-      unlockWrite( lock );
-    }
+    // Сохранение конфигурации
+    IOptionSetEdit config = new OptionSet( configuration() );
+    S5DataQualityTicketList tickets = S5DataQualitySupportConfig.DQ_TICKETS.getValue( config ).asValobj();
+    registeredTickets.removeById( aTicketId );
+    S5DataQualitySupportConfig.DQ_TICKETS.setValue( config, avValobj( tickets ) );
+    // Сохранение настроек в базе данных
+    saveConfiguration( config );
+    // }
+    // finally {
+    // unlockWrite( lock );
+    // }
   }
 
   // ------------------------------------------------------------------------------------
@@ -577,56 +575,56 @@ public class S5BackendDataQualitySingleton
     // Признак необходимости формирования события
     boolean needSendEvent = false;
     // Блокировка доступа
-    lockWrite( lock );
-    try {
-      // Удаление тех тикетов которых больше нет
-      for( ISkDataQualityTicket ticket : new StridablesList<>( registeredTickets ) ) {
-        if( ticket.isBuiltin() ) {
-          // Встроенный тикет игнорируется
-          continue;
-        }
-        if( !aTickets.hasElem( ticket ) ) {
-          // Удаление меток тикета со всех ресурсов
-          IListEdit<Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>>> updatedEntries = new ElemLinkedList<>();
-          try( CloseableIterator<Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>>> iterator =
-              marksByGwidsCache.entrySet().iterator() ) {
-            while( iterator.hasNext() ) {
-              Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>> entry = iterator.next();
-              if( entry.getValue().right().removeByKey( ticket.id() ) != null ) {
-                updatedEntries.add( entry );
-              }
+    // lockWrite( lock );
+    // try {
+    // Удаление тех тикетов которых больше нет
+    for( ISkDataQualityTicket ticket : new StridablesList<>( registeredTickets ) ) {
+      if( ticket.isBuiltin() ) {
+        // Встроенный тикет игнорируется
+        continue;
+      }
+      if( !aTickets.hasElem( ticket ) ) {
+        // Удаление меток тикета со всех ресурсов
+        IListEdit<Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>>> updatedEntries = new ElemLinkedList<>();
+        try( CloseableIterator<Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>>> iterator =
+            marksByGwidsCache.entrySet().iterator() ) {
+          while( iterator.hasNext() ) {
+            Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>> entry = iterator.next();
+            if( entry.getValue().right().removeByKey( ticket.id() ) != null ) {
+              updatedEntries.add( entry );
             }
           }
-          for( Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>> entry : updatedEntries ) {
-            marksByGwidsCache.put( entry.getKey(), entry.getValue() );
-          }
-          // Тикет больше незарегистрирован
-          registeredTickets.remove( ticket );
-          // Требуем отправки события об изменении
-          needSendEvent = true;
-          // Журналирование
-          logger().debug( MSG_UNREGISTER_TICKET, ticket.id() );
         }
-      }
-      // Добавление новых тикетов
-      for( ISkDataQualityTicket ticket : aTickets ) {
-        if( ticket.isBuiltin() ) {
-          // Встроенный тикет игнорируется (добавляется напрямую)
-          continue;
+        for( Entry<Gwid, Pair<Set<Skid>, IOptionSetEdit>> entry : updatedEntries ) {
+          marksByGwidsCache.put( entry.getKey(), entry.getValue() );
         }
-        if( !registeredTickets.hasElem( ticket ) ) {
-          // Регистрация нового тикета
-          registeredTickets.add( ticket );
-          // Требуем отправки события об изменении
-          needSendEvent = true;
-          // Журналирование
-          logger().debug( MSG_REGISTER_TICKET, ticket.id() );
-        }
+        // Тикет больше незарегистрирован
+        registeredTickets.remove( ticket );
+        // Требуем отправки события об изменении
+        needSendEvent = true;
+        // Журналирование
+        logger().debug( MSG_UNREGISTER_TICKET, ticket.id() );
       }
     }
-    finally {
-      unlockWrite( lock );
+    // Добавление новых тикетов
+    for( ISkDataQualityTicket ticket : aTickets ) {
+      if( ticket.isBuiltin() ) {
+        // Встроенный тикет игнорируется (добавляется напрямую)
+        continue;
+      }
+      if( !registeredTickets.hasElem( ticket ) ) {
+        // Регистрация нового тикета
+        registeredTickets.add( ticket );
+        // Требуем отправки события об изменении
+        needSendEvent = true;
+        // Журналирование
+        logger().debug( MSG_REGISTER_TICKET, ticket.id() );
+      }
     }
+    // }
+    // finally {
+    // unlockWrite( lock );
+    // }
     if( needSendEvent ) {
       fireTicketsChangedEvent( backend() );
     }
