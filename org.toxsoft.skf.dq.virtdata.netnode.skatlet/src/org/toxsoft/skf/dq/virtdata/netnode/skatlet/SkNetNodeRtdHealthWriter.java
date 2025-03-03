@@ -18,7 +18,7 @@ import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.virtdata.*;
 
 /**
- * Писатель виртуального данного: {@link ISkNetNode#RTDID_HEALTH}
+ * Писатель виртуального данного: {@link ISkNetNode#RTDID_HEALTH} или его аналога.
  *
  * @author mvk
  */
@@ -34,37 +34,42 @@ final class SkNetNodeRtdHealthWriter
    * Конструктор.
    *
    * @param aCoreApi {@link ISkCoreApi} API соединения.
-   * @param aNetNodeId {@link Skid} идентификатор сетевого узла.
-   * @param aHealthIds {@link IGwidList} список идентификаторов ресурсов представляющих "интегральная оценка состояния
-   *          подключенных узлов" {@link ISkNetNode#RTDID_HEALTH} (или его аналога в другом классе) у подключенных к
-   *          сетевому узлу ресурсов.
-   * @param aWeigths {@link IIntList} список весов параметра {@link ISkNetNode#RTDID_HEALTH} (или его аналога в другом
-   *          классе) у подключенных к сетевому узлу ресурсов при рассчете собственного {@link ISkNetNode#RTDID_HEALTH}.
+   * @param aHealthOutput {@link Gwid} конкретный ({@link Gwid#isAbstract()}=false) идентификатор ресурса
+   *          представляющего параметр "Интегральная оценка состояния подключенных узлов"
+   *          {@link ISkNetNode#RTDID_HEALTH} (или его аналога в другом классе) у которого устанавливается значение
+   *          параметра {@link ISkNetNode#RTDID_HEALTH}.
+   * @param aHealthInputs {@link IGwidList} список параметров конкретных ({@link Gwid#isAbstract()}=false)
+   *          идентификаторов подключенных к сетевому узлу ресурсов и представляющих параметр "Интегральная оценка
+   *          состояния подключенных узлов" {@link ISkNetNode#RTDID_HEALTH} (или его аналога в другом классе) с помощью
+   *          которого формируется значение параметра {@link ISkNetNode#RTDID_HEALTH}.
+   * @param aInputWeigths {@link IIntList} список весов параметра {@link ISkNetNode#RTDID_HEALTH} (или его аналога в
+   *          другом классе) у подключенных к сетевому узлу ресурсов при рассчете собственного
+   *          {@link ISkNetNode#RTDID_HEALTH}.
    * @throws TsNullArgumentRtException любой аргумент = null
    * @throws TsIllegalArgumentRtException неодинаковый размер списков идентикаторы параметра состояния не могут быть
    *           абстрактным {@link Gwid}.
    * @throws TsIllegalArgumentRtException неодинаковый размер списков состояния и весов.
    * @throws TsIllegalArgumentRtException в системе не найден параметр подключенного ресурса.
    */
-  SkNetNodeRtdHealthWriter( ISkCoreApi aCoreApi, Skid aNetNodeId, IGwidList aHealthIds, IIntList aWeigths ) {
-    super( aCoreApi, Gwid.createRtdata( aNetNodeId.classId(), aNetNodeId.strid(), ISkNetNode.RTDID_HEALTH ) );
-    TsNullArgumentRtException.checkNulls( aHealthIds, aWeigths );
-    if( aHealthIds.size() != aWeigths.size() ) {
-      Integer h = Integer.valueOf( aHealthIds.size() );
-      Integer w = Integer.valueOf( aWeigths.size() );
-      throw new TsIllegalArgumentRtException( ERR_DIMENSION_IS_NOT_EQUAL, aNetNodeId, h, w );
+  SkNetNodeRtdHealthWriter( ISkCoreApi aCoreApi, Gwid aHealthOutput, IGwidList aHealthInputs, IIntList aInputWeigths ) {
+    super( aCoreApi, aHealthOutput );
+    TsNullArgumentRtException.checkNulls( aHealthInputs, aInputWeigths );
+    if( aHealthInputs.size() != aInputWeigths.size() ) {
+      Integer h = Integer.valueOf( aHealthInputs.size() );
+      Integer w = Integer.valueOf( aInputWeigths.size() );
+      throw new TsIllegalArgumentRtException( ERR_DIMENSION_IS_NOT_EQUAL, aHealthOutput, h, w );
     }
-    for( Gwid health : aHealthIds ) {
+    for( Gwid health : aHealthInputs ) {
       TsIllegalArgumentRtException.checkTrue( health.isAbstract() );
     }
-    dataQuality = new SkVirtDataDataQualityReader( aCoreApi, aHealthIds, this );
+    dataQuality = new SkVirtDataDataQualityReader( aCoreApi, aHealthInputs, this );
     currdata = new SkVirtDataCurrDataReader( aCoreApi, Skid.NONE, IStringList.EMPTY, this );
-    currdata.addReadData( aHealthIds );
+    currdata.addReadData( aHealthInputs );
     int wt = 0;
     IMapEdit<Gwid, Integer> w = new ElemMap<>();
-    for( int index = 0, n = aHealthIds.size(); index < n; index++ ) {
-      Integer weigth = aWeigths.get( index );
-      w.put( aHealthIds.get( index ), weigth );
+    for( int index = 0, n = aHealthInputs.size(); index < n; index++ ) {
+      Integer weigth = aInputWeigths.get( index );
+      w.put( aHealthInputs.get( index ), weigth );
       wt += weigth.intValue();
     }
     weights = w;
@@ -76,8 +81,8 @@ final class SkNetNodeRtdHealthWriter
   //
   @Override
   protected IAtomicValue doCalculateValue() {
-    int linkedNodeQtty = dataQuality.resourceIds().size();
-    if( linkedNodeQtty == 0 ) {
+    int inputQtty = dataQuality.resourceIds().size();
+    if( inputQtty == 0 ) {
       // Нет подключенных узлов
       return avInt( 100 );
     }

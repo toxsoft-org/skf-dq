@@ -12,7 +12,6 @@ import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.dq.lib.*;
 import org.toxsoft.uskat.classes.*;
@@ -51,31 +50,54 @@ public class SkNetNodeSkatlet
     ITsThreadExecutor threadExecutor = SkThreadExecutorService.getExecutor( coreApi );
     threadExecutor.syncExec( () -> {
       int i = 0;
+      // health
       while( true ) {
         int index = i++;
-        IAtomicValue id = configs.findValue( NETNODE_ID_PREFIX + index );
-        IAtomicValue healths = configs.findValue( NETNODE_HEALTHS_PREFIX + index );
-        IAtomicValue weights = configs.findValue( NETNODE_WEIGHTS_PREFIX + index );
-        if( id == null && healths == null && weights == null ) {
+        IAtomicValue avHealthOutput = configs.findValue( NETNODE_HEALTH_OUTPUT_PREFIX + index );
+        IAtomicValue avHealthInputs = configs.findValue( NETNODE_HEALTH_INPUTS_PREFIX + index );
+        IAtomicValue avHealthWeights = configs.findValue( NETNODE_HEALTH_WEIGHTS_PREFIX + index );
+        if( avHealthOutput == null && avHealthInputs == null && avHealthWeights == null ) {
           break;
         }
-        if( id == null ) {
-          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_ID_PREFIX + index );
+        if( avHealthOutput == null ) {
+          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_HEALTH_OUTPUT_PREFIX + index );
         }
-        if( healths == null ) {
-          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_HEALTHS_PREFIX + index );
+        if( avHealthInputs == null ) {
+          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_HEALTH_INPUTS_PREFIX + index );
         }
-        if( weights == null ) {
-          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_WEIGHTS_PREFIX + index );
+        if( avHealthWeights == null ) {
+          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_HEALTH_WEIGHTS_PREFIX + index );
         }
-        Skid nodeId = id.asValobj();
-        IGwidList nodeHealths = healths.asValobj();
-        IIntList nodeWeights = weights.asValobj();
-        if( !coreApi.sysdescr().hierarchy().isAssignableFrom( ISkNetNode.CLASS_ID, nodeId.classId() ) ) {
-          throw new TsIllegalArgumentRtException();
+        Gwid healthOutput = avHealthOutput.asValobj();
+        IGwidList healthInputs = avHealthInputs.asValobj();
+        IIntList healthWeights = avHealthWeights.asValobj();
+        // В качестве выходного параметра может быть использован аналог
+        // if( !coreApi.sysdescr().hierarchy().isAssignableFrom( ISkNetNode.CLASS_ID, healthOutput.classId() ) ) {
+        // throw new TsIllegalArgumentRtException();
+        // }
+        writers.add( new SkNetNodeRtdHealthWriter( coreApi, healthOutput, healthInputs, healthWeights ) );
+      }
+      // online
+      while( true ) {
+        int index = i++;
+        IAtomicValue avOnlineOutput = configs.findValue( NETNODE_ONLINE_OUTPUT_PREFIX + index );
+        IAtomicValue avOnlineInputs = configs.findValue( NETNODE_ONLINE_INPUTS_PREFIX + index );
+        if( avOnlineOutput == null && avOnlineInputs == null ) {
+          break;
         }
-        writers.add( new SkNetNodeRtdHealthWriter( coreApi, nodeId, nodeHealths, nodeWeights ) );
-        writers.add( new SkNetNodeRtdOnlineWriter( coreApi, nodeId ) );
+        if( avOnlineOutput == null ) {
+          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_HEALTH_OUTPUT_PREFIX + index );
+        }
+        if( avOnlineInputs == null ) {
+          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_HEALTH_INPUTS_PREFIX + index );
+        }
+        Gwid onlineOutput = avOnlineOutput.asValobj();
+        IGwidList onlineInputs = avOnlineInputs.asValobj();
+        // В качестве выходного параметра может быть использован аналог
+        // if( !coreApi.sysdescr().hierarchy().isAssignableFrom( ISkNetNode.CLASS_ID, healthOutput.classId() ) ) {
+        // throw new TsIllegalArgumentRtException();
+        // }
+        writers.add( new SkNetNodeRtdOnlineWriter( coreApi, onlineOutput, onlineInputs ) );
       }
       // Register dataquality list
       GwidList writeDataIds = new GwidList();

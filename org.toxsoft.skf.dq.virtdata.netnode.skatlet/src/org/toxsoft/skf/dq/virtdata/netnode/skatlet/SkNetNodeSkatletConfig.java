@@ -36,19 +36,39 @@ public final class SkNetNodeSkatletConfig {
   public static final String NETNODE_ID_PREFIX = SYBSYSTEM_ID_PREFIX + ".skid";
 
   /**
-   * Префикс имен параметров списка конкретных ({@link Gwid#isAbstract()}=false) идентификаторов ресурсов представляющих
+   * Префикс имени параметра конкретного ({@link Gwid#isAbstract()}=false) идентификатора ресурса представляющего
    * параметр "Интегральная оценка состояния подключенных узлов" {@link ISkNetNode#RTDID_HEALTH} (или его аналога в
-   * другом классе) у подключенных к сетевому узлу ресурсов.
+   * другом классе) у которого устанавливается значение параметра {@link ISkNetNode#RTDID_HEALTH}.
+   * <p>
+   * Тип: {@link EAtomicType#VALOBJ} ({@link Gwid}).
+   * <p>
+   * Пример: <code>
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
+   * </code>
+   */
+  public static final String NETNODE_HEALTH_OUTPUT_PREFIX = SYBSYSTEM_ID_PREFIX + ".health.output";
+
+  /**
+   * Префикс имен списка параметров конкретных ({@link Gwid#isAbstract()}=false) идентификаторов подключенных к сетевому
+   * узлу ресурсов и представляющих параметр "Интегральная оценка состояния подключенных узлов"
+   * {@link ISkNetNode#RTDID_HEALTH} (или его аналога в другом классе) с помощью которого формируется значение параметра
+   * {@link ISkNetNode#RTDID_HEALTH}.
    * <p>
    * Тип: {@link EAtomicType#VALOBJ} ({@link IGwidList}).
    * <p>
    * Пример: <code>
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.skid0=@Skid[sk.Server[valcom.main]]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.healths=@GwidList[sk.Server[valcom.local0]$rtdata(health),sk.Server[valcom.local1]$rtdata(health)]]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.weights=@IntList[ 35, 65 ]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
    * </code>
    */
-  public static final String NETNODE_HEALTHS_PREFIX = SYBSYSTEM_ID_PREFIX + ".healths";
+  public static final String NETNODE_HEALTH_INPUTS_PREFIX = SYBSYSTEM_ID_PREFIX + ".health.inputs";
 
   /**
    * Префикс имен параметров списка весов параметра {@link ISkNetNode#RTDID_HEALTH} (или его аналога в другом классе) у
@@ -57,11 +77,45 @@ public final class SkNetNodeSkatletConfig {
    * Тип: {@link EAtomicType#VALOBJ} ({@link IIntList}).
    * <p>
    * Пример: <code>
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.skid0=@Skid[sk.Server[valcom.main]]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.healths=@GwidList[sk.Server[valcom.local0]$rtdata(health),sk.Server[valcom.local1]$rtdata(health)]]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.weights=@IntList[ 35, 65 ]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
    * </code>
    */
-  public static final String NETNODE_WEIGHTS_PREFIX = SYBSYSTEM_ID_PREFIX + ".weights";
+  public static final String NETNODE_HEALTH_WEIGHTS_PREFIX = SYBSYSTEM_ID_PREFIX + ".health.weights";
 
+  /**
+   * Префикс имени параметра конкретного ({@link Gwid#isAbstract()}=false) идентификатора ресурса представляющего
+   * параметр "Включен" {@link ISkNetNode#RTDID_ONLINE} (или его аналога в другом классе) у которого устанавливается
+   * значение параметра {@link ISkNetNode#RTDID_ONLINE}.
+   * <p>
+   * Тип: {@link EAtomicType#VALOBJ} ({@link Gwid}).
+   * <p>
+   * Пример: <code>
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
+   * </code>
+   */
+  public static final String NETNODE_ONLINE_OUTPUT_PREFIX = SYBSYSTEM_ID_PREFIX + ".online.output";
+
+  /**
+   * Префикс имен списка параметров конкретных ({@link Gwid#isAbstract()}=false) идентификаторов любых подключенных к
+   * сетевому узлу ресурсов с помощью которого формируется значение параметра {@link ISkNetNode#RTDID_ONLINE}.
+   * <p>
+   * Тип: {@link EAtomicType#VALOBJ} ({@link IGwidList}).
+   * <p>
+   * Пример: <code>
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
+   * </code>
+   */
+  public static final String NETNODE_ONLINE_INPUTS_PREFIX = SYBSYSTEM_ID_PREFIX + ".online.inputs";
 }
