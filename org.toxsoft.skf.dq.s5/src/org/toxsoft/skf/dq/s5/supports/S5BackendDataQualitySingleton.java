@@ -413,9 +413,9 @@ public class S5BackendDataQualitySingleton
           entry = new Pair<>( new HashSet<>(), new OptionSet() );
           // Добавление идентификатора сессии поставлямая значения данных
           entry.left().add( aSessionID );
-          // Установка значения метки "notConnected"
-          entry.right().setValue( notConnectedTicket.id(), AV_FALSE );
         }
+        // Установка значения метки "notConnected"
+        entry.right().setValue( notConnectedTicket.id(), AV_FALSE );
         // Установка значения в наборе IOptionSetEdit
         entry.right().setValue( ticket.id(), value );
         // Обновление кэша
