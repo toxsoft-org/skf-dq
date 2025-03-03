@@ -49,8 +49,8 @@ public class SkNetNodeSkatlet
     ISkCoreApi coreApi = getSharedConnection().coreApi();
     ITsThreadExecutor threadExecutor = SkThreadExecutorService.getExecutor( coreApi );
     threadExecutor.syncExec( () -> {
-      int i = 0;
       // health
+      int i = 0;
       while( true ) {
         int index = i++;
         IAtomicValue avHealthOutput = configs.findValue( NETNODE_HEALTH_OUTPUT_PREFIX + index );
@@ -78,6 +78,7 @@ public class SkNetNodeSkatlet
         writers.add( new SkNetNodeRtdHealthWriter( coreApi, healthOutput, healthInputs, healthWeights ) );
       }
       // online
+      i = 0;
       while( true ) {
         int index = i++;
         IAtomicValue avOnlineOutput = configs.findValue( NETNODE_ONLINE_OUTPUT_PREFIX + index );
