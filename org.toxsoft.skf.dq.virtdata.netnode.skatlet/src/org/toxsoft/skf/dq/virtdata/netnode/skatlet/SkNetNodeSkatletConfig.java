@@ -30,10 +30,10 @@ public final class SkNetNodeSkatletConfig {
    * Тип: {@link EAtomicType#VALOBJ} ({@link Gwid}).
    * <p>
    * Пример: <code>
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[sk.Server[valcom.server.main]$rtdata(health)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
    * </code>
    */
@@ -48,10 +48,10 @@ public final class SkNetNodeSkatletConfig {
    * Тип: {@link EAtomicType#VALOBJ} ({@link IGwidList}).
    * <p>
    * Пример: <code>
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[sk.Server[valcom.server.main]$rtdata(health)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
    * </code>
    */
@@ -64,10 +64,10 @@ public final class SkNetNodeSkatletConfig {
    * Тип: {@link EAtomicType#VALOBJ} ({@link IIntList}).
    * <p>
    * Пример: <code>
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[sk.Server[valcom.server.main]$rtdata(health)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
    * </code>
    */
@@ -81,10 +81,10 @@ public final class SkNetNodeSkatletConfig {
    * Тип: {@link EAtomicType#VALOBJ} ({@link Gwid}).
    * <p>
    * Пример: <code>
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[sk.Server[valcom.server.main]$rtdata(health)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
    * </code>
    */
@@ -97,10 +97,10 @@ public final class SkNetNodeSkatletConfig {
    * Тип: {@link EAtomicType#VALOBJ} ({@link IGwidList}).
    * <p>
    * Пример: <code>
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[@GwidList[sk.Server[valcom.server.main]$rtdata(health)]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.output0=@Gwid[sk.Server[valcom.server.main]$rtdata(health)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.inputs0=@GwidList[sk.Server[valcom.server.local1]$rtdata(health),sk.Server[valcom.server.local2]$rtdata(health)]]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.health.weights0=@IntList[ 35, 65 ]
-   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]]
+   * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.output0=@Gwid[sk.Server[valcom.server.local1]$rtdata(online)]
    * -Dorg.toxsoft.uskat.skatlets.virtdata.netnode.online.input0=@Gwid[sk.Server[valcom.server.local1]$rtdata(health)]]
    * </code>
    */
