@@ -50,7 +50,7 @@ final class SkNetNodeRtdOnlineWriter
     IMap<Gwid, IOptionSet> marks = dataQuality.getResourcesMarks();
     for( Gwid gwid : dataQuality.resourceIds() ) {
       IAtomicValue notConnected = marks.findByKey( gwid ).findByKey( ISkDataQualityService.TICKET_ID_NO_CONNECTION );
-      if( !notConnected.asBool() ) {
+      if( notConnected == null || !notConnected.asBool() ) {
         return avValobj( EConnState.ONLINE );
       }
     }
