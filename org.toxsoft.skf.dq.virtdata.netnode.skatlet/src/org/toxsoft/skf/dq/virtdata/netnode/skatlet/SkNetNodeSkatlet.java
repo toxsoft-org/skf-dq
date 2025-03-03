@@ -87,10 +87,10 @@ public class SkNetNodeSkatlet
           break;
         }
         if( avOnlineOutput == null ) {
-          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_HEALTH_OUTPUT_PREFIX + index );
+          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_ONLINE_OUTPUT_PREFIX + index );
         }
         if( avOnlineInputs == null ) {
-          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_HEALTH_INPUTS_PREFIX + index );
+          throw new TsItemNotFoundRtException( ERR_NOT_FOUND, NETNODE_ONLINE_INPUTS_PREFIX + index );
         }
         Gwid onlineOutput = avOnlineOutput.asValobj();
         IGwidList onlineInputs = avOnlineInputs.asValobj();
