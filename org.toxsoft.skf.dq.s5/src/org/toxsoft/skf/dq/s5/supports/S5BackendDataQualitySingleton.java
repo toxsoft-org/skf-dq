@@ -46,6 +46,8 @@ import org.toxsoft.uskat.s5.server.sessions.*;
 
 /**
  * Реализация {@link IS5BackendDataQualitySingleton}.
+ * <p>
+ * TODO: требуется переработка: обработка {@link ISkDataQualityService#TICKET_ID_NO_CONNECTION} на общих основаниях.
  *
  * @author mvk
  */
