@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='2'>
+  <artifact classifier='osgi.bundle' id='org.toxsoft.skf.dq.virtdata.netnode.skatlet' version='1.0.0.202503160634'>
+    <properties size='9'>
+      <property name='artifact.size' value='12100'/>
+      <property name='download.size' value='12100'/>
+      <property name='download.checksum.sha-512' value='8c5807cee9c3f58a17df0dff94595a924dcf9a2db8bd131bba99fd1548c2ac409f7302f5e55705e4aad6b07e9d7b9f202efa1c6d6fb491bc41081bd3e0634fb8'/>
+      <property name='download.checksum.sha-1' value='e5a4408592739c3f9ff37eb72f949822b98c4186'/>
+      <property name='download.checksum.sha-256' value='a7e0bf0b0cd943e79db24ed41e4735c4843fa2d275ce998e59bde9f6a6bc7d5f'/>
+      <property name='maven-groupId' value='org.toxsoft.skf.dq'/>
+      <property name='maven-artifactId' value='org.toxsoft.skf.dq.virtdata.netnode.skatlet'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+  </artifact>
+  <artifact classifier='osgi.bundle' id='org.toxsoft.skf.dq.virtdata.netnode.skatlet.source' version='1.0.0.202503160634'>
+    <properties size='10'>
+      <property name='artifact.size' value='9109'/>
+      <property name='download.size' value='9109'/>
+      <property name='download.checksum.sha-512' value='fbaa5d1a396ac99eb22a169988cf049249f8b7b389d20406011283e21fa895122c8ba1211e3b0f473f4d73683ddfda560daf86bd4391ec62e4bd74c302982bcb'/>
+      <property name='download.checksum.sha-1' value='92cb352fa7eb48874de3e10fff093aafac2a0a14'/>
+      <property name='download.checksum.sha-256' value='3443741990b34248112cef492609a24c9ebd34d6d36d26168cf264c01f500b94'/>
+      <property name='maven-groupId' value='org.toxsoft.skf.dq'/>
+      <property name='maven-artifactId' value='org.toxsoft.skf.dq.virtdata.netnode.skatlet'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-classifier' value='sources'/>
+      <property name='maven-type' value='java-source'/>
+    </properties>
+  </artifact>
+</artifacts>

@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='2'>
+  <unit id='org.toxsoft.skf.dq.virtdata.netnode.skatlet' version='1.0.0.202503160634' singleton='false' generation='2'>
+    <update id='org.toxsoft.skf.dq.virtdata.netnode.skatlet' range='[0.0.0,1.0.0.202503160634)' severity='0'/>
+    <properties size='6'>
+      <property name='org.eclipse.equinox.p2.name' value='Writing sk.NetNode virtual data based on the data quality service'/>
+      <property name='org.eclipse.equinox.p2.provider' value='ToxSoft Ltd.'/>
+      <property name='maven-groupId' value='org.toxsoft.skf.dq'/>
+      <property name='maven-artifactId' value='org.toxsoft.skf.dq.virtdata.netnode.skatlet'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='5'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.toxsoft.skf.dq.virtdata.netnode.skatlet' version='1.0.0.202503160634'/>
+      <provided namespace='osgi.bundle' name='org.toxsoft.skf.dq.virtdata.netnode.skatlet' version='1.0.0.202503160634'/>
+      <provided namespace='java.package' name='org.toxsoft.skf.dq.virtdata.netnode.skatlet' version='0.0.0'/>
+      <provided namespace='osgi.identity' name='org.toxsoft.skf.dq.virtdata.netnode.skatlet' version='1.0.0.202503160634'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='10'>
+      <required namespace='osgi.bundle' name='org.toxsoft.extlibs.log4j' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.toxsoft.core.tslib' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.toxsoft.core.log4j' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.toxsoft.uskat.core' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.toxsoft.uskat.virtdata' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.toxsoft.uskat.s5' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.toxsoft.skf.dq.lib' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.toxsoft.skf.dq.virtdata' range='0.0.0'/>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=21))'>
+        <description>
+          org.toxsoft.skf.dq.virtdata.netnode.skatlet
+        </description>
+      </requiredProperties>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.toxsoft.skf.dq.virtdata.netnode.skatlet.source' range='[1.0.0.202503160634,1.0.0.202503160634]' optional='true'>
+        <filter>
+          (org.eclipse.update.install.sources=true)
+        </filter>
+      </required>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='org.toxsoft.skf.dq.virtdata.netnode.skatlet' version='1.0.0.202503160634'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: org.toxsoft.skf.dq.virtdata.netnode.skatlet&#xA;Bundle-Version: 1.0.0.202503160634&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+  <unit id='org.toxsoft.skf.dq.virtdata.netnode.skatlet.source' version='1.0.0.202503160634' singleton='false'>
+    <update id='org.toxsoft.skf.dq.virtdata.netnode.skatlet.source' range='[0.0.0,1.0.0.202503160634)' severity='0'/>
+    <properties size='10'>
+      <property name='df_LT.bundleVendor' value='ToxSoft Ltd.'/>
+      <property name='df_LT.bundleName' value='Writing sk.NetNode virtual data based on the data quality service Source'/>
+      <property name='org.eclipse.equinox.p2.name' value='%bundleName'/>
+      <property name='org.eclipse.equinox.p2.provider' value='%bundleVendor'/>
+      <property name='org.eclipse.equinox.p2.bundle.localization' value='OSGI-INF/l10n/bundle-src'/>
+      <property name='maven-groupId' value='org.toxsoft.skf.dq'/>
+      <property name='maven-artifactId' value='org.toxsoft.skf.dq.virtdata.netnode.skatlet'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-classifier' value='sources'/>
+      <property name='maven-type' value='java-source'/>
+    </properties>
+    <provides size='5'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.toxsoft.skf.dq.virtdata.netnode.skatlet.source' version='1.0.0.202503160634'/>
+      <provided namespace='osgi.bundle' name='org.toxsoft.skf.dq.virtdata.netnode.skatlet.source' version='1.0.0.202503160634'/>
+      <provided namespace='osgi.identity' name='org.toxsoft.skf.dq.virtdata.netnode.skatlet.source' version='1.0.0.202503160634'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='source' version='1.0.0'/>
+      <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+    </provides>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='org.toxsoft.skf.dq.virtdata.netnode.skatlet.source' version='1.0.0.202503160634'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: org.toxsoft.skf.dq.virtdata.netnode.skatlet.source&#xA;Bundle-Version: 1.0.0.202503160634&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>
