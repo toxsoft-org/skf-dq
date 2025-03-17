@@ -397,6 +397,8 @@ public class S5BackendDataQualitySingleton
       // Попытка установки метки встроенного тикета
       throw new TsIllegalArgumentRtException( ERR_MARK_BUILTIN_TICKET, aTicketId );
     }
+    // Список ресурсов удаляемый из соединения
+    GwidList removeConnected = getConnectedResources( aSessionID );
     // Тип значений метки
     EAtomicType ticketType = ticket.dataType().atomicType();
     for( Gwid gwid2 : aValues.keys() ) {
@@ -422,6 +424,8 @@ public class S5BackendDataQualitySingleton
         entry.right().setValue( ticket.id(), value );
         // Обновление кэша
         marksByGwidsCache.put( gwid, entry );
+        // Поправка списка удаляемых ресурсов
+        removeConnected.remove( gwid );
         // Требование отправки события
         needSendEvent = true;
         // Журналирование
@@ -435,6 +439,11 @@ public class S5BackendDataQualitySingleton
     // finally {
     // unlockWrite( lock );
     // }
+    if( removeConnected.size() > 0 ) {
+      // Удаление из списка сессии
+      removeResources( aSessionID, removeConnected );
+      needSendEvent = true;
+    }
     if( needSendEvent ) {
       fireResourceChangedEvent( backend(), aTicketId );
     }
