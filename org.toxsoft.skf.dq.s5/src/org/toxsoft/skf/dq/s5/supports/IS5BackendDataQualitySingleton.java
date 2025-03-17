@@ -17,7 +17,7 @@ import org.toxsoft.uskat.classes.*;
 import org.toxsoft.uskat.s5.server.backend.*;
 
 /**
- * Поддержка расширения бекенда для службы качества данных {@link IBaDataQuality}
+ * Поддержка расширения бекенда для службы качества данных {@link IBaDataQuality}.
  *
  * @author mvk
  */
