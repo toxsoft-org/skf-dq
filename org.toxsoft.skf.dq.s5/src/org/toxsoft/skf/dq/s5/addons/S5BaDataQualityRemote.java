@@ -62,7 +62,6 @@ public final class S5BaDataQualityRemote
 
   @Override
   public IMap<Gwid, IOptionSet> getResourcesMarks( IGwidList aResources ) {
-    TsNullArgumentRtException.checkNull( aResources );
     return session().getResourcesMarks( aResources );
   }
 

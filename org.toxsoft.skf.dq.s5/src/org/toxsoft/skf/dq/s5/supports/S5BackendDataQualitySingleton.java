@@ -220,10 +220,10 @@ public class S5BackendDataQualitySingleton
 
   @Override
   public IMap<Gwid, IOptionSet> getResourcesMarks( IGwidList aResources ) {
-    TsNullArgumentRtException.checkNull( aResources );
     IMapEdit<Gwid, IOptionSet> retValue = new ElemMap<>();
     // Разгруппировка идентификатора
-    IGwidList gwids = ungroupGwids( coreApi(), aResources );
+    IGwidList gwids =
+        aResources == null ? new GwidList( marksByGwidsCache.keySet() ) : ungroupGwids( coreApi(), aResources );
     for( Gwid gwid : gwids ) {
       IOptionSet marks = getResourceMarks( gwid );
       retValue.put( gwid, marks );

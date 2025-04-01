@@ -85,9 +85,8 @@ public interface ISkDataQualityService
    * <li>CtPot[*]$rtdata( * ).</li>
    * </ul>
    *
-   * @param aResources {@link IGwidList} список запрашиваемых ресурсов
+   * @param aResources {@link IGwidList} список запрашиваемых ресурсов. null: получить метки всех ресурсов.
    * @return IMap&lt;{@link Gwid},{@link IOptionSet}&gt; карта "ресурс" - "значения пометок"
-   * @throws TsNullArgumentRtException любой аргумент = null
    * @throws TsIllegalArgumentRtException запрет абстрактных {@link Gwid} - должен быть указан объект или объекты(*)
    * @throws TsIllegalArgumentRtException {@link Gwid} не представляют данное {@link EGwidKind#GW_RTDATA}
    * @throws TsIllegalArgumentRtException {@link Gwid} несуществующего класса, объекта или данного

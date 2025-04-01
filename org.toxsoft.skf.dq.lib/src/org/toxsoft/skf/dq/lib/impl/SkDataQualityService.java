@@ -201,19 +201,21 @@ public class SkDataQualityService
 
   @Override
   public IMap<Gwid, IOptionSet> getResourcesMarks( IGwidList aResources ) {
-    TsNullArgumentRtException.checkNull( aResources );
-    if( !coreApi().backend().isActive() ) {
-      // Бекенд недоступен.
-      IOptionSetEdit options = new OptionSet();
-      // По умолчанию TICKET_ID_NO_CONNECTION = true
-      options.setValue( TICKET_ID_NO_CONNECTION, AV_TRUE );
-      IMapEdit<Gwid, IOptionSet> retValue = new ElemMap<>();
-      for( Gwid gwid : aResources ) {
-        retValue.put( gwid, options );
-      }
-      return retValue;
+    if( coreApi().backend().isActive() ) {
+      return backend().getResourcesMarks( aResources );
     }
-    return backend().getResourcesMarks( aResources );
+    if( aResources == null ) {
+      return IMap.EMPTY;
+    }
+    IMapEdit<Gwid, IOptionSet> retValue = new ElemMap<>();
+    // Бекенд недоступен
+    IOptionSetEdit options = new OptionSet();
+    // По умолчанию TICKET_ID_NO_CONNECTION = true
+    options.setValue( TICKET_ID_NO_CONNECTION, AV_TRUE );
+    for( Gwid gwid : aResources ) {
+      retValue.put( gwid, options );
+    }
+    return retValue;
   }
 
   @Override

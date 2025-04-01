@@ -80,7 +80,6 @@ public final class S5BaDataQualityLocal
 
   @Override
   public IMap<Gwid, IOptionSet> getResourcesMarks( IGwidList aResources ) {
-    TsNullArgumentRtException.checkNull( aResources );
     return dataQualitySupport.getResourcesMarks( aResources );
   }
 
