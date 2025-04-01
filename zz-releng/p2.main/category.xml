@@ -8,10 +8,12 @@
    <bundle id="org.toxsoft.skf.dq.lib"/>
    <bundle id="org.toxsoft.skf.dq.s5"/>
    <bundle id="org.toxsoft.skf.dq.virtdata"/>
+   <bundle id="org.toxsoft.skf.dq.skadmin"/>
 
    <!-- sources -->
    <bundle id="org.toxsoft.skf.dq.lib.source"/>
    <bundle id="org.toxsoft.skf.dq.s5.source"/>
    <bundle id="org.toxsoft.skf.dq.virtdata.source"/>
+   <bundle id="org.toxsoft.skf.dq.skadmin.source"/>
 
 </site>

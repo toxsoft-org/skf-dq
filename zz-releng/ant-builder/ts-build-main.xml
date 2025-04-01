@@ -19,6 +19,7 @@
     <ant dir="../../org.toxsoft.skf.dq.lib" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
     <ant dir="../../org.toxsoft.skf.dq.s5" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
     <ant dir="../../org.toxsoft.skf.dq.virtdata" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
+    <ant dir="../../org.toxsoft.skf.dq.skadmin" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
 
   </target>
 
@@ -32,7 +33,8 @@
                        exportType="directory"
                        plugins="org.toxsoft.skf.dq.lib,
                                 org.toxsoft.skf.dq.s5,
-                                org.toxsoft.skf.dq.virtdata"
+                                org.toxsoft.skf.dq.virtdata,
+                                org.toxsoft.skf.dq.skadmin"
                        useworkspacecompiledclasses="true"
                        useJARFormat="true" />
   </target>
