@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ISkDataQualityService skadmin-support
+Bundle-SymbolicName: org.toxsoft.skf.dq.skadmin
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: ToxSoft Ltd.
+Require-Bundle: org.toxsoft.extlibs.wildfly,
+ org.toxsoft.core.tslib,
+ org.toxsoft.core.pas,
+ org.toxsoft.uskat.core,
+ org.toxsoft.uskat.s5,
+ org.toxsoft.skf.dq.lib,
+ org.toxsoft.uskat.skadmin.core
+Export-Package: org.toxsoft.skf.dq.skadmin,
+ org.toxsoft.skf.dq.skadmin.dq
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Automatic-Module-Name: org.toxsoft.skf.dq.skadmin
+TsPluginContainerVersion: 2
+TsPluginVersion:    {4,0,2022-08-22_00:00:00}
+TsPluginType:       skadmin.library
+TsPluginClassName:  org.toxsoft.skf.dq.skadmin.AdminPluginDq
