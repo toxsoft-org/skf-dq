@@ -770,26 +770,26 @@ public class S5BackendDataQualitySingleton
   /**
    * Формирует событие "изменение состояния ресурса"
    *
-   * @param aBackend {@link IS5BackendCoreSingleton} бекенд s5-сервера
+   * @param aEventer {@link IS5BackendEventer} передатчик сообщений бекенда
    * @param aResourceId String идентификатор ресурса
    * @throws TsNullArgumentRtException любой аргумент = null
    */
-  private static void fireResourceChangedEvent( IS5BackendCoreSingleton aBackend, String aResourceId ) {
-    TsNullArgumentRtException.checkNulls( aBackend, aResourceId );
+  private static void fireResourceChangedEvent( IS5BackendEventer aEventer, String aResourceId ) {
+    TsNullArgumentRtException.checkNulls( aEventer, aResourceId );
     GtMessage msg = SkDataQualityMsgResourceChanged.INSTANCE.makeMessage( aResourceId );
-    aBackend.fireBackendMessage( msg );
+    aEventer.fireBackendMessage( msg );
   }
 
   /**
    * Формирует событие "изменение состояния ярлыков"
    *
-   * @param aBackend {@link IS5BackendCoreSingleton} бекенд s5-сервера
+   * @param aEventer {@link IS5BackendEventer} передатчик сообщений бекенда
    * @throws TsNullArgumentRtException любой аргумент = null
    */
-  private static void fireTicketsChangedEvent( IS5BackendCoreSingleton aBackend ) {
-    TsNullArgumentRtException.checkNull( aBackend );
+  private static void fireTicketsChangedEvent( IS5BackendEventer aEventer ) {
+    TsNullArgumentRtException.checkNull( aEventer );
     GtMessage msg = SkDataQualityMsgTicketsChanged.INSTANCE.makeMessage();
-    aBackend.fireBackendMessage( msg );
+    aEventer.fireBackendMessage( msg );
   }
 
   /**
